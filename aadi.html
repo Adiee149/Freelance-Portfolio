@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth bg-black text-white">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purnaditya Suvvari | Premium Freelance Consultant</title>
+    
+    <!-- Fonts: Space Grotesk for futuristic headers, Inter for readable body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Core Animation Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.27/bundled/lenis.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Inter"', 'sans-serif'],
+                        display: ['"Space Grotesk"', 'sans-serif'],
+                    },
+                    colors: {
+                        theme: {
+                            base: '#000000',
+                            surface: '#050505',
+                            surfaceHover: '#0a0a0a',
+                            border: '#1a1a1a',
+                            borderLight: '#2a2a2a',
+                            accent: '#ffffff',
+                            muted: '#777777',
+                        }
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                        'grid-pattern': 'linear-gradient(to right, #111 1px, transparent 1px), linear-gradient(to bottom, #111 1px, transparent 1px)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --cursor-size: 8px;
+            --cursor-outline-size: 40px;
+            --theme-borderLight: #2a2a2a;
+        }
+
+        body, html {
+            background-color: #000000;
+            color: #ffffff;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        /* Lenis Smooth Scroll Setup */
+        html.lenis { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto; }
+        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+        .lenis.lenis-stopped { overflow: hidden; }
+        section[id] { scroll-margin-top: 6rem; }
+
+        /* Minimal Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #000000; }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+        /* Custom Cursor Elements */
+        #cursor-dot, #cursor-outline {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        #cursor-dot {
+            width: var(--cursor-size);
+            height: var(--cursor-size);
+            background-color: white;
+            transition: width 0.2s, height 0.2s, opacity 0.2s;
+        }
+        #cursor-outline {
+            width: var(--cursor-outline-size);
+            height: var(--cursor-outline-size);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+        
+        /* Cursor Modifiers */
+        body.hovering #cursor-dot { opacity: 0; }
+        body.hovering #cursor-outline {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(2px);
+            border-color: white;
+        }
+
+        @media (pointer: fine) {
+            body.custom-cursor { cursor: none; }
+            body.custom-cursor #cursor-dot,
+            body.custom-cursor #cursor-outline { display: block; }
+        }
+
+        /* Ambient Grain Overlay */
+        .noise-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9998;
+            opacity: 0.03;
+            pointer-events: none;
+            background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+        }
+
+        /* Advanced Grid Background */
+        .bg-grid {
+            background-size: 40px 40px;
+            mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+            -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+        }
+
+        /* Typography & Utilities */
+        .reveal-text, .reveal-element { opacity: 1; clip-path: none; }
+        .outline-text {
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
+            transition: -webkit-text-stroke 0.3s ease, color 0.3s ease;
+        }
+        .outline-text:hover {
+            color: white;
+            -webkit-text-stroke: 1px white;
+        }
+
+        /* Portrait treatment */
+        .cyber-stage {
+            position: relative;
+            isolation: isolate;
+            width: min(100%, 500px);
+            aspect-ratio: 4/5;
+        }
+        .cyber-stage::before {
+            position: absolute;
+            inset: 10% 3% 5%;
+            z-index: -1;
+            border-radius: 50%;
+            background: radial-gradient(ellipse, rgba(205, 170, 130, 0.2) 0%, rgba(135, 145, 165, 0.1) 40%, transparent 72%);
+            filter: blur(32px);
+            content: "";
+        }
+        .cyber-stage::after {
+            position: absolute;
+            inset: 48% 0 0;
+            z-index: 10;
+            background: linear-gradient(to bottom, transparent 55%, rgba(0, 0, 0, 0.42));
+            content: "";
+            pointer-events: none;
+        }
+        .teaching-sequence {
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1.25rem;
+            padding-top: 1.5rem;
+        }
+        .teaching-sequence::before,
+        .teaching-sequence::after {
+            position: absolute;
+            top: 0.45rem;
+            left: 12%;
+            right: 12%;
+            height: 1px;
+            content: "";
+        }
+        .teaching-sequence::before {
+            background: linear-gradient(90deg, transparent, rgba(185, 202, 230, 0.32), transparent);
+        }
+        .teaching-sequence::after {
+            right: auto;
+            width: 25%;
+            background: linear-gradient(90deg, transparent, rgba(225, 235, 250, 0.9), transparent);
+            box-shadow: 0 0 12px rgba(185, 202, 230, 0.65);
+            animation: teaching-signal 9s ease-in-out infinite;
+        }
+        .teaching-step {
+            position: relative;
+            min-height: 12rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(150deg, rgba(255,255,255,0.045), rgba(255,255,255,0.008));
+            padding: 1.6rem 1.5rem;
+            transition: border-color 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+        }
+        .teaching-step::before {
+            position: absolute;
+            top: -1.35rem;
+            left: 50%;
+            width: 0.7rem;
+            height: 0.7rem;
+            border: 1px solid rgba(220, 232, 250, 0.7);
+            border-radius: 50%;
+            background: #080a0e;
+            box-shadow: 0 0 14px rgba(185, 202, 230, 0.24);
+            content: "";
+            transform: translateX(-50%);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .teaching-step .step-index {
+            display: block;
+            margin-bottom: 1.2rem;
+            color: #8e98a8;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 0.18em;
+        }
+        .teaching-step h3 {
+            margin-bottom: 0.5rem;
+            color: white;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+        .teaching-step p {
+            color: #9298a3;
+            font-size: 0.78rem;
+            line-height: 1.65;
+        }
+        @media (hover: hover) and (pointer: fine) {
+            .teaching-step:hover {
+                transform: translateY(-5px);
+                border-color: rgba(205, 220, 245, 0.34);
+                background: linear-gradient(150deg, rgba(185, 202, 230, 0.09), rgba(255,255,255,0.015));
+            }
+            .teaching-step:hover::before {
+                background: #dce8f8;
+                box-shadow: 0 0 20px rgba(185, 202, 230, 0.75);
+            }
+        }
+        @keyframes teaching-signal {
+            0% { transform: translateX(0); opacity: 0.25; }
+            50% { opacity: 1; }
+            100% { transform: translateX(300%); opacity: 0.25; }
+        }
+        @media (max-width: 767px) {
+            .teaching-sequence {
+                grid-template-columns: minmax(0, 1fr);
+                gap: 0.75rem;
+                padding: 0 0 0 2.2rem;
+            }
+            .teaching-sequence::before,
+            .teaching-sequence::after {
+                top: 0.5rem;
+                bottom: 0.5rem;
+                left: 0.58rem;
+                right: auto;
+                width: 1px;
+                height: auto;
+            }
+            .teaching-sequence::before {
+                background: linear-gradient(180deg, transparent, rgba(185, 202, 230, 0.32), transparent);
+            }
+            .teaching-sequence::after {
+                height: 18%;
+                background: linear-gradient(180deg, transparent, rgba(225, 235, 250, 0.9), transparent);
+                animation-name: teaching-signal-mobile;
+            }
+            .teaching-step {
+                min-height: 0;
+                padding: 1.1rem 1.25rem;
+            }
+            .teaching-step::before {
+                top: 1.4rem;
+                left: -2.2rem;
+            }
+            .teaching-step .step-index { margin-bottom: 0.65rem; }
+        }
+        @keyframes teaching-signal-mobile {
+            0% { transform: translateY(0); opacity: 0.25; }
+            50% { opacity: 1; }
+            100% { transform: translateY(420%); opacity: 0.25; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .teaching-sequence::after { animation: none; }
+            .teaching-step { transition: none; }
+        }
+        
+        /* Forms */
+        .input-cyber {
+            width: 100%;
+            min-height: 3.25rem;
+            border: 1px solid var(--theme-borderLight);
+            border-radius: 0.25rem;
+            background: rgba(0, 0, 0, 0.45);
+            padding: 0.875rem 1rem;
+            color: white;
+            font: inherit;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .input-cyber:focus {
+            border-color: white;
+            box-shadow: 0 0 15px rgba(255,255,255,0.1);
+            outline: none;
+        }
+        .input-cyber::placeholder { color: #777; }
+        .contact-label {
+            display: block;
+            margin-bottom: 0.65rem;
+            color: #999;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            line-height: 1.4;
+            text-transform: uppercase;
+        }
+        .course-mark {
+            display: grid;
+            width: 3rem;
+            height: 3rem;
+            flex: none;
+            place-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 0.75rem;
+            background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.025));
+            color: #fff;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+        }
+        .course-card {
+            display: flex;
+            min-height: 17rem;
+            flex-direction: column;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(145deg, rgba(255,255,255,0.035), rgba(255,255,255,0.008));
+            padding: 1.5rem;
+            transition: border-color 0.25s ease, background-color 0.25s ease, transform 0.25s ease;
+        }
+        .course-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.3);
+            background-color: rgba(255,255,255,0.025);
+        }
+        .feedback-card {
+            display: flex;
+            width: min(82vw, 350px);
+            min-height: 300px;
+            flex-direction: column;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(145deg, rgba(255,255,255,0.035), rgba(255,255,255,0.008));
+            padding: 1.5rem;
+        }
+        .feedback-viewport {
+            overflow-x: auto;
+            overscroll-behavior-inline: contain;
+            scrollbar-width: none;
+        }
+        .feedback-viewport::-webkit-scrollbar { display: none; }
+        .feedback-track, .feedback-group {
+            display: flex;
+            width: max-content;
+        }
+        .feedback-track {
+            gap: 0;
+            animation: feedback-marquee var(--feedback-duration, 120s) linear infinite;
+            will-change: transform;
+        }
+        .feedback-group { gap: 1rem; }
+        @keyframes feedback-marquee {
+            to { transform: translateX(-50%); }
+        }
+        .feedback-pause:focus-visible {
+            outline: 2px solid white;
+            outline-offset: 3px;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .feedback-track { animation: none; transform: none; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto !important; }
+            *, *::before, *::after {
+                scroll-behavior: auto !important;
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body class="selection:bg-white selection:text-black">
+
+    <!-- Ambient / UI Overlays -->
+    <div class="noise-overlay"></div>
+    <div id="cursor-dot"></div>
+    <div id="cursor-outline"></div>
+
+    <!-- Interactive Node Canvas -->
+    <canvas id="network-canvas" aria-hidden="true" class="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-50"></canvas>
+    <!-- Background Grid -->
+    <div class="fixed inset-0 w-full h-full pointer-events-none z-0 bg-grid-pattern bg-grid opacity-30"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 mix-blend-difference py-6 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center relative">
+            <a href="#hero" class="font-display font-bold tracking-[0.2em] uppercase text-white text-sm magnetic hover-trigger">
+                [ Purnaditya ]
+            </a>
+            <nav aria-label="Main navigation" class="hidden md:flex gap-10 text-[10px] tracking-widest uppercase font-medium text-theme-muted font-display">
+                <a href="#about" class="hover:text-white transition-colors hover-trigger">01. About</a>
+                <a href="#expertise" class="hover:text-white transition-colors hover-trigger">02. Expertise</a>
+                <a href="#programs" class="hover:text-white transition-colors hover-trigger">03. Programs</a>
+            </nav>
+            <a href="#contact" class="hidden sm:inline-flex px-6 py-3 text-[10px] font-bold tracking-[0.2em] uppercase border border-theme-borderLight hover:bg-white hover:text-black transition-all magnetic hover-trigger">
+                Initialize Connect
+            </a>
+            <button id="nav-toggle" type="button" class="md:hidden border border-theme-borderLight px-4 py-3 text-[10px] font-bold tracking-[0.2em] uppercase text-white" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open navigation menu">
+                Menu
+            </button>
+            <div id="mobile-menu" class="hidden absolute left-6 right-6 top-full mt-3 border border-theme-borderLight bg-black/95 p-5 shadow-2xl backdrop-blur-md md:hidden">
+                <nav aria-label="Mobile navigation" class="flex flex-col gap-5 text-[11px] tracking-widest uppercase font-medium text-theme-muted font-display">
+                    <a href="#about" class="hover:text-white transition-colors">01. About</a>
+                    <a href="#expertise" class="hover:text-white transition-colors">02. Expertise</a>
+                    <a href="#programs" class="hover:text-white transition-colors">03. Programs</a>
+                    <a href="#contact" class="text-white">04. Contact</a>
+                </nav>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10">
+        
+        <!-- HERO SECTION -->
+        <section id="hero" class="min-h-screen flex flex-col justify-start px-6 relative pt-24 lg:justify-center lg:pt-20">
+            <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Text Content -->
+                <div class="lg:col-span-7 order-2 lg:order-1 relative z-20 -mt-48 sm:-mt-56 lg:mt-0">
+                    <div class="flex items-center gap-3 mb-8 reveal-element">
+                        <div class="h-[1px] w-12 bg-white"></div>
+                        <p class="font-display text-theme-muted uppercase tracking-[0.3em] text-[10px] font-semibold">
+                            System Architecture & Intelligence
+                        </p>
+                    </div>
+                    
+                    <h1 class="font-display text-5xl md:text-7xl lg:text-[5.5rem] font-bold tracking-tighter text-white leading-[1.05] mb-6">
+                        <div class="overflow-hidden"><span class="inline-block reveal-text">Engineering</span></div>
+                        <div class="overflow-hidden"><span class="inline-block reveal-text text-theme-muted">Ideas,</span></div>
+                        <div class="overflow-hidden"><span class="inline-block reveal-text">Building</span></div>
+                        <div class="overflow-hidden"><span class="inline-block reveal-text text-theme-muted">Intelligence.</span></div>
+                    </h1>
+                    
+                    <div class="font-display text-lg md:text-xl font-light text-theme-muted mb-10 flex items-center gap-3 reveal-element">
+                        <span>> ROLE : </span>
+                        <!-- Scrambler Text Container -->
+                        <span id="scramble-text" class="text-white font-medium tracking-wide">DATA ANALYTICS EXPERT</span><span class="animate-pulse">_</span>
+                    </div>
+
+                    <p class="max-w-md text-sm md:text-base text-theme-muted font-sans font-light leading-relaxed mb-12 reveal-element">
+                        Bridging the gap between complex software and human capability. Specializing in Excel, Power BI, SQL, and AI Integration to automate the mundane and elevate decision-making algorithms.
+                    </p>
+
+                    <div class="flex flex-wrap gap-6 reveal-element">
+                        <a href="#expertise" class="magnetic hover-trigger px-8 py-4 bg-white text-black text-[10px] uppercase tracking-[0.2em] font-bold hover:bg-gray-200 transition-colors flex items-center gap-2">
+                            Explore Systems <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Image Content (Cyber Stage) -->
+                <div class="lg:col-span-5 order-1 lg:order-2 flex w-full min-w-0 justify-center lg:justify-end reveal-element">
+                    <div class="cyber-stage">
+                        <div class="absolute inset-x-[12%] bottom-[4%] top-[8%] z-0 rounded-[50%] border border-white/[0.08]" aria-hidden="true"></div>
+                        <div class="absolute inset-0 z-10 overflow-hidden">
+                            <img src="my_img.png" alt="Purnaditya Suvvari" class="h-full w-full object-contain object-bottom drop-shadow-[0_24px_40px_rgba(0,0,0,0.5)]" />
+                        </div>
+                        
+                        <div class="absolute right-2 top-[18%] z-20 hidden border border-white/10 bg-black/60 px-3 py-2 backdrop-blur-sm sm:block">
+                            <p class="font-display text-[9px] uppercase tracking-[0.18em] text-white/75">Data · Design · Delivery</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Scroll Indicator -->
+            <div class="hidden md:flex absolute bottom-10 left-1/2 -translate-x-1/2 flex-col items-center gap-2 opacity-50">
+                <span class="text-[9px] font-display uppercase tracking-widest">Scroll</span>
+                <div class="w-[1px] h-12 bg-gradient-to-b from-white to-transparent"></div>
+            </div>
+        </section>
+
+        <section id="about" class="relative overflow-hidden border-t border-theme-borderLight px-6 py-24 md:py-32">
+            <div class="pointer-events-none absolute -right-40 top-10 h-96 w-96 rounded-full bg-white/[0.035] blur-3xl" aria-hidden="true"></div>
+            <div class="relative mx-auto max-w-7xl">
+                <div class="mb-12 flex items-center gap-4 reveal-element">
+                    <span class="font-display text-[10px] font-semibold uppercase tracking-[0.3em] text-theme-muted">About</span>
+                    <span class="h-px w-14 bg-theme-borderLight"></span>
+                    <span class="font-display text-[10px] uppercase tracking-[0.2em] text-theme-muted">The person behind the process</span>
+                </div>
+
+                <div class="grid gap-12 lg:grid-cols-[minmax(0,1.5fr)_minmax(280px,0.7fr)] lg:gap-20">
+                    <div class="reveal-element">
+                        <h2 class="max-w-4xl font-display text-4xl font-semibold leading-[1.08] tracking-tight text-white md:text-6xl">
+                            I turn complex tools into
+                            <span class="text-theme-muted"> practical skills </span>
+                            and systems people can use.
+                        </h2>
+                        <p class="mt-8 max-w-2xl font-sans text-base font-light leading-8 text-theme-muted md:text-lg">
+                            My work connects data analytics, Microsoft technologies, workflow automation, and AI. I help learners and teams move beyond theory—building confidence by applying what they learn to real tasks and useful outcomes.
+                        </p>
+                        <div class="mt-10 flex flex-wrap gap-2" aria-label="Areas of work">
+                            <span class="border border-theme-borderLight px-4 py-2 font-display text-[10px] uppercase tracking-[0.16em] text-white/80">Data analytics</span>
+                            <span class="border border-theme-borderLight px-4 py-2 font-display text-[10px] uppercase tracking-[0.16em] text-white/80">Microsoft tools</span>
+                            <span class="border border-theme-borderLight px-4 py-2 font-display text-[10px] uppercase tracking-[0.16em] text-white/80">Automation</span>
+                            <span class="border border-theme-borderLight px-4 py-2 font-display text-[10px] uppercase tracking-[0.16em] text-white/80">AI integration</span>
+                        </div>
+                    </div>
+
+                    <aside class="self-end border border-theme-borderLight bg-white/[0.02] p-6 md:p-8 reveal-element" aria-label="My working approach">
+                        <p class="mb-7 font-display text-[10px] font-semibold uppercase tracking-[0.25em] text-theme-muted">How I work</p>
+                        <ol class="divide-y divide-white/10">
+                            <li class="flex gap-5 py-4 first:pt-0">
+                                <span class="font-display text-xs text-theme-muted">01</span>
+                                <div>
+                                    <h3 class="font-display text-sm font-semibold text-white">Start with the real problem</h3>
+                                    <p class="mt-1 text-xs leading-6 text-theme-muted">Understand the task, the people, and the outcome that matters.</p>
+                                </div>
+                            </li>
+                            <li class="flex gap-5 py-4">
+                                <span class="font-display text-xs text-theme-muted">02</span>
+                                <div>
+                                    <h3 class="font-display text-sm font-semibold text-white">Learn by doing</h3>
+                                    <p class="mt-1 text-xs leading-6 text-theme-muted">Use the tools on practical examples, not just demonstrations.</p>
+                                </div>
+                            </li>
+                            <li class="flex gap-5 pt-4">
+                                <span class="font-display text-xs text-theme-muted">03</span>
+                                <div>
+                                    <h3 class="font-display text-sm font-semibold text-white">Build for everyday use</h3>
+                                    <p class="mt-1 text-xs leading-6 text-theme-muted">Turn the learning into repeatable skills and useful workflows.</p>
+                                </div>
+                            </li>
+                        </ol>
+                    </aside>
+                </div>
+            </div>
+        </section>
+
+        <!-- TEACHING APPROACH -->
+        <section id="expertise" class="py-32 px-6 relative">
+            <div class="max-w-7xl mx-auto">
+                <div class="mb-10 grid gap-5 md:grid-cols-[minmax(0,1fr)_minmax(0,20rem)] md:items-end">
+                    <div>
+                        <p class="font-display text-theme-muted uppercase tracking-[0.3em] text-[10px] font-semibold mb-4 reveal-element">Why learn with me</p>
+                        <h2 class="max-w-4xl font-display text-4xl md:text-6xl font-bold reveal-element">Learning that feels real.</h2>
+                    </div>
+                    <p class="max-w-sm text-sm leading-6 text-theme-muted reveal-element">I understand who I’m teaching, connect the subject to their world, and turn it into skills they can use.</p>
+                </div>
+
+                <ol class="teaching-sequence reveal-element" aria-label="How I make learning meaningful">
+                    <li class="teaching-step">
+                        <span class="step-index">01 / UNDERSTAND</span>
+                        <h3>Start with the learner</h3>
+                        <p>I listen for their goals, experience, and real-life challenges.</p>
+                    </li>
+                    <li class="teaching-step">
+                        <span class="step-index">02 / MAKE IT MATTER</span>
+                        <h3>Bring the subject to life</h3>
+                        <p>Stories and familiar problems show why the skill matters.</p>
+                    </li>
+                    <li class="teaching-step">
+                        <span class="step-index">03 /Script function not found: doGet PUT IT TO WORK</span>
+                        <h3>Practice for real life</h3>
+                        <p>Learners solve realistic tasks and leave ready to apply the skill.</p>
+                    </li>
+                </ol>
+            </div>
+        </section>
+        <!-- STATS SECTION (MARQUEE + DATA) -->
+        <section class="py-24 border-y border-theme-borderLight bg-black overflow-hidden relative">
+            <div class="whitespace-nowrap flex font-display text-[8vw] font-bold text-theme-borderLight outline-text uppercase tracking-tighter" id="marquee">
+                <span>SYSTEM PARAMETERS • OPERATIONAL METRICS • PERFORMANCE DATA •</span>
+                <span>SYSTEM PARAMETERS • OPERATIONAL METRICS • PERFORMANCE DATA •</span>
+            </div>
+            
+            <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 mt-16 text-center">
+                <div class="reveal-element">
+                    <div class="font-display text-6xl md:text-8xl font-bold text-white mb-2 flex justify-center items-baseline">
+                        <span class="counter" data-target="20">0</span><span class="text-3xl text-theme-muted">+</span>
+                    </div>
+                    <div class="font-display text-[10px] uppercase tracking-[0.2em] text-theme-muted">Workshops Executed</div>
+                </div>
+                <div class="reveal-element">
+                    <div class="font-display text-6xl md:text-8xl font-bold text-white mb-2 flex justify-center items-baseline">
+                        <span class="counter" data-target="500">0</span><span class="text-3xl text-theme-muted">+</span>
+                    </div>
+                    <div class="font-display text-[10px] uppercase tracking-[0.2em] text-theme-muted">Operatives Trained</div>
+                </div>
+                <div class="reveal-element">
+                    <div class="font-display text-6xl md:text-8xl font-bold text-white mb-2 flex justify-center items-baseline">
+                        <span class="counter" data-target="100">0</span><span class="text-3xl text-theme-muted">%</span>
+                    </div>
+                    <div class="font-display text-[10px] uppercase tracking-[0.2em] text-theme-muted">Practical Application</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- STUDENT FEEDBACK -->
+        <section id="feedback" class="relative border-b border-theme-borderLight px-6 py-24 md:py-28">
+            <div class="mx-auto max-w-7xl">
+                <div class="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                    <div>
+                        <p class="font-display text-theme-muted uppercase tracking-[0.3em] text-[10px] font-semibold mb-4 reveal-element">Student feedback</p>
+                        <h2 class="font-display text-4xl md:text-5xl font-bold reveal-element">Real learning. In their words.</h2>
+                    </div>
+                    <div class="flex items-center gap-5 reveal-element">
+                        <p class="max-w-sm text-sm leading-6 text-theme-muted">Feedback shared by learners across analytics, AI, Excel, and presentation courses.</p>
+                        <button id="feedback-toggle" type="button" class="feedback-pause shrink-0 border border-theme-borderLight px-4 py-3 font-display text-[9px] font-bold uppercase tracking-[0.16em] text-white transition-colors hover:border-white" aria-pressed="false" aria-label="Pause feedback auto-scroll">Pause</button>
+                    </div>
+                </div>
+
+                <div class="feedback-viewport" id="feedback-viewport" role="region" aria-label="Student feedback carousel" tabindex="0">
+                    <div class="feedback-track" id="feedback-track" aria-live="off">
+                        <div class="feedback-group" id="feedback-group">
+                            <figure class="feedback-card reveal-element">
+                                <span class="font-display text-4xl leading-none text-white/30" aria-hidden="true">“</span>
+                                <blockquote class="mt-3 flex-1 text-sm leading-7 text-white/85">“I have improved a lot and I get more confidence through this bootcamp thankyou sir for choosing our college”</blockquote>
+                                <figcaption class="mt-8 border-t border-white/10 pt-4">
+                                    <p class="font-display text-sm font-semibold text-white">Geethamounika</p>
+                                    <p class="mt-1 font-display text-[9px] uppercase tracking-[0.16em] text-theme-muted">Data analytics workshop</p>
+                                </figcaption>
+                            </figure>
+
+                            <figure class="feedback-card reveal-element">
+                                <span class="font-display text-4xl leading-none text-white/30" aria-hidden="true">“</span>
+                                <blockquote class="mt-3 flex-1 text-sm leading-7 text-white/85">“I learnt so much by this data analytics workshop, and the workshops helps to improve their skills.”</blockquote>
+                                <figcaption class="mt-8 border-t border-white/10 pt-4">
+                                    <p class="font-display text-sm font-semibold text-white">Teja</p>
+                                    <p class="mt-1 font-display text-[9px] uppercase tracking-[0.16em] text-theme-muted">Data analytics workshop</p>
+                                </figcaption>
+                            </figure>
+
+                            <figure class="feedback-card reveal-element">
+                                <span class="font-display text-4xl leading-none text-white/30" aria-hidden="true">“</span>
+                                <blockquote class="mt-3 flex-1 text-sm leading-7 text-white/85">“Great learning experience! The sessions were engaging, practical, and beginner-friendly. I gained valuable knowledge about Claude AI and its applications.”</blockquote>
+                                <figcaption class="mt-8 border-t border-white/10 pt-4">
+                                    <p class="font-display text-sm font-semibold text-white">Devabathini</p>
+                                    <p class="mt-1 font-display text-[9px] uppercase tracking-[0.16em] text-theme-muted">Claude AI workshop</p>
+                                </figcaption>
+                            </figure>
+
+                            <figure class="feedback-card reveal-element">
+                                <span class="font-display text-4xl leading-none text-white/30" aria-hidden="true">“</span>
+                                <blockquote class="mt-3 flex-1 text-sm leading-7 text-white/85">“The Workshop helped me how to Prompt in a perfect way to get Efficient output needed in claude.”</blockquote>
+                                <figcaption class="mt-8 border-t border-white/10 pt-4">
+                                    <p class="font-display text-sm font-semibold text-white">Maddi</p>
+                                    <p class="mt-1 font-display text-[9px] uppercase tracking-[0.16em] text-theme-muted">Claude AI workshop</p>
+                                </figcaption>
+                            </figure>
+
+                            <figure class="feedback-card reveal-element">
+                                <span class="font-display text-4xl leading-none text-white/30" aria-hidden="true">“</span>
+                                <blockquote class="mt-3 flex-1 text-sm leading-7 text-white/85">“I love the class very much..I like the way of teaching and I learnt alot of thing from this sessions...I love the story telling in classes which help us to understand the concept very easily”</blockquote>
+                                <figcaption class="mt-8 border-t border-white/10 pt-4">
+                                    <p class="font-display text-sm font-semibold text-white">Saikumar</p>
+                                    <p class="mt-1 font-display text-[9px] uppercase tracking-[0.16em] text-theme-muted">Excel workshop</p>
+                                </figcaption>
+                            </figure>
+
+                            <figure class="feedback-card reveal-element">
+                                <span class="font-display text-4xl leading-none text-white/30" aria-hidden="true">“</span>
+                                <blockquote class="mt-3 flex-1 text-sm leading-7 text-white/85">“I learned so much from all the three sessions and I enjoyed doing the practice work on mini projects. Your teaching style is so good like it's very informative, creative and engaging.”</blockquote>
+                                <figcaption class="mt-8 border-t border-white/10 pt-4">
+                                    <p class="font-display text-sm font-semibold text-white">Saipriyanka</p>
+                                    <p class="mt-1 font-display text-[9px] uppercase tracking-[0.16em] text-theme-muted">Excel workshop</p>
+                                </figcaption>
+                            </figure>
+
+                            <figure class="feedback-card reveal-element">
+                                <span class="font-display text-4xl leading-none text-white/30" aria-hidden="true">“</span>
+                                <blockquote class="mt-3 flex-1 text-sm leading-7 text-white/85">“The course went soo good and Ive gained a lot of ppt knowledge. Thank u anna”</blockquote>
+                                <figcaption class="mt-8 border-t border-white/10 pt-4">
+                                    <p class="font-display text-sm font-semibold text-white">Ishvar</p>
+                                    <p class="mt-1 font-display text-[9px] uppercase tracking-[0.16em] text-theme-muted">PowerPoint mastery</p>
+                                </figcaption>
+                            </figure>
+
+                            <figure class="feedback-card reveal-element">
+                                <span class="font-display text-4xl leading-none text-white/30" aria-hidden="true">“</span>
+                                <blockquote class="mt-3 flex-1 text-sm leading-7 text-white/85">“The course insights are very useful for improving the power point skills.”</blockquote>
+                                <figcaption class="mt-8 border-t border-white/10 pt-4">
+                                    <p class="font-display text-sm font-semibold text-white">Nuthan</p>
+                                    <p class="mt-1 font-display text-[9px] uppercase tracking-[0.16em] text-theme-muted">PowerPoint mastery</p>
+                                </figcaption>
+                            </figure>
+
+                            <figure class="feedback-card reveal-element">
+                                <span class="font-display text-4xl leading-none text-white/30" aria-hidden="true">“</span>
+                                <blockquote class="mt-3 flex-1 text-sm leading-7 text-white/85">“Very interactive and informative sessions starting from basics and redirecting to professional tricks were enjoyable and well demonstrated.”</blockquote>
+                                <figcaption class="mt-8 border-t border-white/10 pt-4">
+                                    <p class="font-display text-sm font-semibold text-white">Ansu</p>
+                                    <p class="mt-1 font-display text-[9px] uppercase tracking-[0.16em] text-theme-muted">PowerPoint mastery</p>
+                                </figcaption>
+                            </figure>
+
+                            <figure class="feedback-card reveal-element">
+                                <span class="font-display text-4xl leading-none text-white/30" aria-hidden="true">“</span>
+                                <blockquote class="mt-3 flex-1 text-sm leading-7 text-white/85">“I personally thought I was very good at PPT before attending the session! Later joining the course I got to know there are lot more things that I need to learn.”</blockquote>
+                                <figcaption class="mt-8 border-t border-white/10 pt-4">
+                                    <p class="font-display text-sm font-semibold text-white">Shriya</p>
+                                    <p class="mt-1 font-display text-[9px] uppercase tracking-[0.16em] text-theme-muted">PowerPoint mastery</p>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROGRAMS / CURRICULUM -->
+        <section id="programs" class="py-32 px-6 relative">
+            <div class="max-w-7xl mx-auto">
+                <div class="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                    <div>
+                        <p class="font-display text-theme-muted uppercase tracking-[0.3em] text-[10px] font-semibold mb-4 reveal-element">Curriculum</p>
+                        <h2 class="font-display text-4xl md:text-5xl font-bold reveal-element">Practical learning, built for work.</h2>
+                    </div>
+                    <p class="max-w-md text-sm leading-6 text-theme-muted reveal-element">Hands-on courses across analytics, automation, presentation, and visual communication.</p>
+                </div>
+
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                    <article class="course-card reveal-element">
+                        <div class="mb-6 flex items-center justify-between">
+                            <span class="course-mark" aria-hidden="true">DATA</span>
+                            <span class="font-display text-xs tracking-widest text-theme-muted">01</span>
+                        </div>
+                        <h3 class="font-display text-lg font-bold text-white">Data Analytics</h3>
+                        <p class="mt-2 text-sm leading-6 text-theme-muted">Excel, SQL, Python, and Power BI through practical end-to-end projects.</p>
+                        <a href="#contact" data-course="Data Analytics" class="course-action mt-auto pt-6 font-display text-[10px] font-bold uppercase tracking-[0.18em] text-theme-muted transition-colors hover:text-white focus-visible:text-white">Explore course <span aria-hidden="true">→</span></a>
+                    </article>
+
+                    <article class="course-card reveal-element">
+                        <div class="mb-6 flex items-center justify-between">
+                            <span class="course-mark" aria-hidden="true">XLS</span>
+                            <span class="font-display text-xs tracking-widest text-theme-muted">02</span>
+                        </div>
+                        <h3 class="font-display text-lg font-bold text-white">Excel &amp; VBA Automation</h3>
+                        <p class="mt-2 text-sm leading-6 text-theme-muted">Formulas, macros, and automated reporting that reduce repetitive work.</p>
+                        <a href="#contact" data-course="Excel & VBA Automation" class="course-action mt-auto pt-6 font-display text-[10px] font-bold uppercase tracking-[0.18em] text-theme-muted transition-colors hover:text-white focus-visible:text-white">Explore course <span aria-hidden="true">→</span></a>
+                    </article>
+
+                    <article class="course-card reveal-element">
+                        <div class="mb-6 flex items-center justify-between">
+                            <span class="course-mark" aria-hidden="true">BI</span>
+                            <span class="font-display text-xs tracking-widest text-theme-muted">03</span>
+                        </div>
+                        <h3 class="font-display text-lg font-bold text-white">Power BI &amp; Data Modeling</h3>
+                        <p class="mt-2 text-sm leading-6 text-theme-muted">Power Query, DAX, data models, and clear decision-ready dashboards.</p>
+                        <a href="#contact" data-course="Power BI & Data Modeling" class="course-action mt-auto pt-6 font-display text-[10px] font-bold uppercase tracking-[0.18em] text-theme-muted transition-colors hover:text-white focus-visible:text-white">Explore course <span aria-hidden="true">→</span></a>
+                    </article>
+
+                    <article class="course-card reveal-element">
+                        <div class="mb-6 flex items-center justify-between">
+                            <span class="course-mark" aria-hidden="true">AI</span>
+                            <span class="font-display text-xs tracking-widest text-theme-muted">04</span>
+                        </div>
+                        <h3 class="font-display text-lg font-bold text-white">Generative AI at Work</h3>
+                        <p class="mt-2 text-sm leading-6 text-theme-muted">Practical prompting, AI assistants, and responsible workflow integration.</p>
+                        <a href="#contact" data-course="Generative AI at Work" class="course-action mt-auto pt-6 font-display text-[10px] font-bold uppercase tracking-[0.18em] text-theme-muted transition-colors hover:text-white focus-visible:text-white">Explore course <span aria-hidden="true">→</span></a>
+                    </article>
+
+                    <article class="course-card reveal-element">
+                        <div class="mb-6 flex items-center justify-between">
+                            <span class="course-mark" aria-hidden="true">U/X</span>
+                            <span class="font-display text-xs tracking-widest text-theme-muted">05</span>
+                        </div>
+                        <h3 class="font-display text-lg font-bold text-white">UI/UX Foundations</h3>
+                        <p class="mt-2 text-sm leading-6 text-theme-muted">User flows, wireframes, visual hierarchy, and usable interface principles.</p>
+                        <a href="#contact" data-course="UI/UX Foundations" class="course-action mt-auto pt-6 font-display text-[10px] font-bold uppercase tracking-[0.18em] text-theme-muted transition-colors hover:text-white focus-visible:text-white">Explore course <span aria-hidden="true">→</span></a>
+                    </article>
+
+                    <article class="course-card reveal-element">
+                        <div class="mb-6 flex items-center justify-between">
+                            <span class="course-mark" aria-hidden="true">PPT</span>
+                            <span class="font-display text-xs tracking-widest text-theme-muted">06</span>
+                        </div>
+                        <h3 class="font-display text-lg font-bold text-white">PowerPoint Presentations</h3>
+                        <p class="mt-2 text-sm leading-6 text-theme-muted">Build polished, structured presentations with confident visual design.</p>
+                        <a href="#contact" data-course="PowerPoint Presentations" class="course-action mt-auto pt-6 font-display text-[10px] font-bold uppercase tracking-[0.18em] text-theme-muted transition-colors hover:text-white focus-visible:text-white">Explore course <span aria-hidden="true">→</span></a>
+                    </article>
+
+                    <article class="course-card reveal-element">
+                        <div class="mb-6 flex items-center justify-between">
+                            <span class="course-mark" aria-hidden="true">S</span>
+                            <span class="font-display text-xs tracking-widest text-theme-muted">07</span>
+                        </div>
+                        <h3 class="font-display text-lg font-bold text-white">Storytelling Mastery</h3>
+                        <p class="mt-2 text-sm leading-6 text-theme-muted">Shape a clear narrative and make ideas and insights memorable.</p>
+                        <a href="#contact" data-course="Storytelling Mastery" class="course-action mt-auto pt-6 font-display text-[10px] font-bold uppercase tracking-[0.18em] text-theme-muted transition-colors hover:text-white focus-visible:text-white">Explore course <span aria-hidden="true">→</span></a>
+                    </article>
+
+                    <article class="course-card reveal-element">
+                        <div class="mb-6 flex items-center justify-between">
+                            <span class="course-mark" aria-hidden="true">C</span>
+                            <span class="font-display text-xs tracking-widest text-theme-muted">08</span>
+                        </div>
+                        <h3 class="font-display text-lg font-bold text-white">Canva Design Essentials</h3>
+                        <p class="mt-2 text-sm leading-6 text-theme-muted">Create cohesive graphics and branded visual content in Canva.</p>
+                        <a href="#contact" data-course="Canva Design Essentials" class="course-action mt-auto pt-6 font-display text-[10px] font-bold uppercase tracking-[0.18em] text-theme-muted transition-colors hover:text-white focus-visible:text-white">Explore course <span aria-hidden="true">→</span></a>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT SECTION -->
+        <section id="contact" class="py-32 px-6 border-t border-theme-borderLight bg-black relative">
+            <div class="max-w-4xl mx-auto reveal-element">
+                
+                <div class="mb-16">
+                    <p class="font-display text-theme-muted uppercase tracking-[0.3em] text-[10px] font-semibold mb-4">Transmission</p>
+                    <h2 class="font-display text-5xl md:text-7xl font-bold mb-6">Initialize Contact.</h2>
+                    <p class="text-sm text-theme-muted max-w-lg font-sans">
+                        Establish a secure connection to discuss consulting, systems architecture, or operational training. Response matrix typically under 24 hours.
+                    </p>
+                </div>
+
+                <div class="p-5 sm:p-8 md:p-12 border border-theme-borderLight bg-theme-surface relative overflow-hidden">
+                    <div class="absolute inset-0 bg-grid-pattern bg-grid opacity-10 pointer-events-none"></div>
+                    
+                    <form id="inquiryForm" method="post" class="space-y-10 relative z-10" onsubmit="event.preventDefault(); submitForm();">
+                        <div class="hidden" aria-hidden="true">
+                            <label for="contact-website">Leave this field empty</label>
+                            <input id="contact-website" name="website" type="text" tabindex="-1" autocomplete="off">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-7">
+                            <div>
+                                <label for="contact-name" class="contact-label">Full name</label>
+                                <input id="contact-name" name="name" type="text" autocomplete="name" required class="input-cyber" placeholder="Your name">
+                            </div>
+                            
+                            <div>
+                                <label for="contact-email" class="contact-label">Email address</label>
+                                <input id="contact-email" name="email" type="email" autocomplete="email" required class="input-cyber" placeholder="you@example.com">
+                            </div>
+
+                            <div>
+                                <label for="contact-whatsapp" class="contact-label">WhatsApp number</label>
+                                <input id="contact-whatsapp" name="whatsapp" type="tel" autocomplete="tel" inputmode="tel" required pattern="(?=.*[0-9])[+]?[0-9 ().-]{7,24}" title="Enter a valid WhatsApp number, including country code if applicable." class="input-cyber" placeholder="+1 555 123 4567">
+                            </div>
+
+                            <div>
+                                <label for="contact-organization" class="contact-label">Organization <span class="normal-case tracking-normal">(optional)</span></label>
+                                <input id="contact-organization" name="organization" type="text" autocomplete="organization" class="input-cyber" placeholder="Company or institution">
+                            </div>
+
+                            <div>
+                                <label for="contact-type" class="contact-label">What are you interested in?</label>
+                                <select id="contact-type" name="engagement" required class="input-cyber cursor-pointer">
+                                    <option value="" disabled selected>Select an option</option>
+                                    <option value="mentoring">1-on-1 Mentoring</option>
+                                    <option value="training">Corporate or institutional training</option>
+                                    <option value="consulting">Consulting</option>
+                                    <option value="course">A course or workshop</option>
+                                </select>
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <label for="contact-details" class="contact-label">How can I help?</label>
+                                <textarea id="contact-details" name="details" rows="5" maxlength="2000" class="input-cyber min-h-[9rem] resize-y" placeholder="Tell me a little about your goals, audience, or preferred course."></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col gap-6 border-t border-theme-borderLight pt-6">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
+                            <button type="submit" id="submitBtn" class="magnetic hover-trigger w-full sm:w-auto px-10 py-4 bg-white text-black font-display text-[10px] uppercase tracking-[0.2em] font-bold hover:bg-gray-200 transition-colors flex items-center justify-center gap-3">
+                                Transmit Data <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                            </button>
+                            <a href="https://www.linkedin.com/in/purnaditya-suvvari-6922aa244/" target="_blank" rel="noopener noreferrer" class="magnetic hover-trigger self-center font-display text-[10px] uppercase tracking-[0.2em] font-bold text-theme-muted hover:text-white transition-colors flex items-center gap-2">
+                                View LinkedIn Node <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </a>
+                            </div>
+                            <p id="formStatus" class="font-display text-xs leading-5 text-amber-200 hidden" role="status" aria-live="polite"></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <footer class="py-10 border-t border-theme-borderLight bg-black flex flex-col md:flex-row justify-between items-center px-6 max-w-7xl mx-auto">
+            <p class="font-display text-[10px] tracking-[0.2em] uppercase text-theme-muted">
+                System Build: 2026 // Purnaditya Suvvari
+            </p>
+            <div class="flex gap-4 mt-4 md:mt-0 font-display text-[10px] tracking-[0.2em] uppercase text-theme-muted">
+                <a href="#hero" class="hover:text-white transition-colors">Back to top</a>
+                <a href="https://www.linkedin.com/in/purnaditya-suvvari-6922aa244/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">LinkedIn</a>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            const hasGsap = typeof window.gsap !== "undefined";
+            const hasScrollTrigger = hasGsap && typeof window.ScrollTrigger !== "undefined";
+
+            const navToggle = document.getElementById("nav-toggle");
+            const mobileMenu = document.getElementById("mobile-menu");
+
+            function closeMobileMenu() {
+                if (!navToggle || !mobileMenu) return;
+                navToggle.setAttribute("aria-expanded", "false");
+                navToggle.setAttribute("aria-label", "Open navigation menu");
+                mobileMenu.classList.add("hidden");
+            }
+
+            if (navToggle && mobileMenu) {
+                navToggle.addEventListener("click", () => {
+                    const isOpen = navToggle.getAttribute("aria-expanded") === "true";
+                    navToggle.setAttribute("aria-expanded", String(!isOpen));
+                    navToggle.setAttribute("aria-label", isOpen ? "Open navigation menu" : "Close navigation menu");
+                    mobileMenu.classList.toggle("hidden", isOpen);
+                });
+                mobileMenu.querySelectorAll("a").forEach(link => link.addEventListener("click", closeMobileMenu));
+                document.addEventListener("keydown", event => {
+                    if (event.key === "Escape") closeMobileMenu();
+                });
+            }
+
+            document.querySelectorAll("[data-course]").forEach(link => {
+                link.addEventListener("click", () => {
+                    const details = document.getElementById("contact-details");
+                    const engagement = document.getElementById("contact-type");
+                    if (details) details.value = `I'm interested in the ${link.dataset.course} course.`;
+                    if (engagement) engagement.value = "course";
+                });
+            });
+
+            const feedbackViewport = document.getElementById("feedback-viewport");
+            const feedbackTrack = document.getElementById("feedback-track");
+            const feedbackGroup = document.getElementById("feedback-group");
+            const feedbackToggle = document.getElementById("feedback-toggle");
+
+            if (feedbackViewport && feedbackTrack && feedbackGroup && feedbackToggle) {
+                if (reducedMotion) {
+                    feedbackToggle.hidden = true;
+                } else {
+                    const duplicateGroup = feedbackGroup.cloneNode(true);
+                    duplicateGroup.removeAttribute("id");
+                    duplicateGroup.setAttribute("aria-hidden", "true");
+                    duplicateGroup.inert = true;
+                    feedbackTrack.appendChild(duplicateGroup);
+
+                    let userPaused = false;
+
+                    function measureFeedbackLoop() {
+                        const groupWidth = feedbackGroup.getBoundingClientRect().width;
+                        if (groupWidth > 0) {
+                            feedbackTrack.style.setProperty("--feedback-duration", `${groupWidth / 28}s`);
+                        }
+                    }
+
+                    feedbackToggle.addEventListener("click", () => {
+                        userPaused = !userPaused;
+                        feedbackTrack.style.animationPlayState = userPaused ? "paused" : "running";
+                        feedbackToggle.textContent = userPaused ? "Resume" : "Pause";
+                        feedbackToggle.setAttribute("aria-pressed", String(userPaused));
+                        feedbackToggle.setAttribute("aria-label", userPaused ? "Resume feedback auto-scroll" : "Pause feedback auto-scroll");
+                    });
+                    window.addEventListener("resize", measureFeedbackLoop, { passive: true });
+
+                    measureFeedbackLoop();
+                }
+            }
+
+            if (hasGsap && !reducedMotion && window.Lenis) {
+                const lenis = new Lenis({
+                    duration: 1.2,
+                    easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                    smoothWheel: true,
+                    smoothTouch: false
+                });
+                if (hasScrollTrigger) lenis.on("scroll", ScrollTrigger.update);
+                gsap.ticker.add(time => lenis.raf(time * 1000));
+                gsap.ticker.lagSmoothing(0);
+            }
+
+            const finePointer = window.matchMedia("(pointer: fine)").matches;
+            const cursorDot = document.getElementById("cursor-dot");
+            const cursorOutline = document.getElementById("cursor-outline");
+            let mouseX = -1000;
+            let mouseY = -1000;
+            let outlineX = mouseX;
+            let outlineY = mouseY;
+
+            if (finePointer && !reducedMotion && cursorDot && cursorOutline) {
+                document.body.classList.add("custom-cursor");
+                window.addEventListener("mousemove", event => {
+                    mouseX = event.clientX;
+                    mouseY = event.clientY;
+                    cursorDot.style.left = `${mouseX}px`;
+                    cursorDot.style.top = `${mouseY}px`;
+                });
+
+                function animateCursor() {
+                    outlineX += (mouseX - outlineX) * 0.15;
+                    outlineY += (mouseY - outlineY) * 0.15;
+                    cursorOutline.style.left = `${outlineX}px`;
+                    cursorOutline.style.top = `${outlineY}px`;
+                    requestAnimationFrame(animateCursor);
+                }
+                animateCursor();
+
+                document.addEventListener("pointerover", event => {
+                    if (event.target.closest("a, button, input, select, textarea")) document.body.classList.add("hovering");
+                });
+                document.addEventListener("pointerout", event => {
+                    if (event.target.closest("a, button, input, select, textarea")) document.body.classList.remove("hovering");
+                });
+            }
+
+            if (hasGsap && finePointer && !reducedMotion) {
+                document.querySelectorAll(".magnetic").forEach(button => {
+                    button.addEventListener("mousemove", event => {
+                        const rect = button.getBoundingClientRect();
+                        gsap.to(button, {
+                            x: (event.clientX - rect.left - rect.width / 2) * 0.2,
+                            y: (event.clientY - rect.top - rect.height / 2) * 0.2,
+                            duration: 0.35,
+                            ease: "power2.out"
+                        });
+                    });
+                    button.addEventListener("mouseleave", () => {
+                        gsap.to(button, { x: 0, y: 0, duration: 0.5, ease: "power2.out" });
+                    });
+                });
+            }
+
+            if (hasGsap && !reducedMotion) {
+                gsap.fromTo(".reveal-text",
+                    { y: 30, clipPath: "inset(100% 0 0 0)" },
+                    { y: 0, clipPath: "inset(0% 0 0 0)", duration: 1.2, stagger: 0.1, ease: "power4.out" }
+                );
+                gsap.fromTo("#hero .reveal-element",
+                    { opacity: 0, y: 24 },
+                    { opacity: 1, y: 0, clipPath: "inset(0% 0 0 0)", duration: 0.8, stagger: 0.1, ease: "power3.out", delay: 0.35 }
+                );
+
+                if (hasScrollTrigger) {
+                    gsap.registerPlugin(ScrollTrigger);
+                    gsap.utils.toArray(".reveal-element:not(#hero .reveal-element)").forEach(element => {
+                        gsap.fromTo(element,
+                            { opacity: 0, y: 30 },
+                            {
+                                opacity: 1,
+                                y: 0,
+                                duration: 0.8,
+                                ease: "power2.out",
+                                scrollTrigger: { trigger: element, start: "top 85%", once: true }
+                            }
+                        );
+                    });
+                }
+
+                gsap.to("#marquee", { xPercent: -50, ease: "none", duration: 20, repeat: -1 });
+            }
+
+            const roles = ["DATA ANALYTICS EXPERT", "MICROSOFT TOOLS EXPERT", "WORKFLOW AUTOMATOR", "AI INTEGRATOR"];
+            const roleElement = document.getElementById("scramble-text");
+            if (roleElement && !reducedMotion) {
+                let roleIndex = 0;
+                window.setInterval(() => {
+                    roleIndex = (roleIndex + 1) % roles.length;
+                    if (hasGsap) {
+                        gsap.to(roleElement, {
+                            opacity: 0,
+                            duration: 0.15,
+                            onComplete: () => {
+                                roleElement.textContent = roles[roleIndex];
+                                gsap.to(roleElement, { opacity: 1, duration: 0.25 });
+                            }
+                        });
+                    } else {
+                        roleElement.textContent = roles[roleIndex];
+                    }
+                }, 4000);
+            }
+
+            const counters = document.querySelectorAll(".counter");
+            if ("IntersectionObserver" in window) {
+                const counterObserver = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        if (!entry.isIntersecting) return;
+                        const target = Number(entry.target.dataset.target);
+                        if (Number.isFinite(target)) {
+                            if (hasGsap && !reducedMotion) {
+                                gsap.to(entry.target, {
+                                    textContent: target,
+                                    duration: 1.5,
+                                    snap: { textContent: 1 },
+                                    ease: "power2.out"
+                                });
+                            } else {
+                                entry.target.textContent = String(target);
+                            }
+                        }
+                        counterObserver.unobserve(entry.target);
+                    });
+                }, { threshold: 0.5 });
+                counters.forEach(counter => counterObserver.observe(counter));
+            } else {
+                counters.forEach(counter => { counter.textContent = counter.dataset.target || "0"; });
+            }
+
+            const canvas = document.getElementById("network-canvas");
+            const ctx = canvas && canvas.getContext("2d");
+            if (!ctx || reducedMotion) return;
+
+            let width = 0;
+            let height = 0;
+            let particles = [];
+            let frameId;
+            const particleCount = () => Math.min(100, Math.max(24, Math.floor(window.innerWidth / 16)));
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.3;
+                    this.vy = (Math.random() - 0.5) * 0.3;
+                    this.radius = Math.random() * 1.5 + 0.5;
+                }
+                update() {
+                    const dx = mouseX - this.x;
+                    const dy = mouseY - this.y;
+                    const distance = Math.hypot(dx, dy);
+                    if (distance > 0 && distance < 150) {
+                        const force = (150 - distance) / 150;
+                        this.x -= (dx / distance) * force * 2;
+                        this.y -= (dy / distance) * force * 2;
+                    }
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+                    ctx.fill();
+                }
+            }
+
+            function resizeCanvas() {
+                const ratio = Math.min(window.devicePixelRatio || 1, 2);
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = Math.round(width * ratio);
+                canvas.height = Math.round(height * ratio);
+                ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+                particles = Array.from({ length: particleCount() }, () => new Particle());
+            }
+
+            function drawNetwork() {
+                ctx.clearRect(0, 0, width, height);
+                particles.forEach(particle => {
+                    particle.update();
+                    particle.draw();
+                });
+
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const distance = Math.hypot(dx, dy);
+                        if (distance < 120) {
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = `rgba(255, 255, 255, ${0.15 - distance / 800})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.stroke();
+                        }
+                    }
+                }
+                frameId = requestAnimationFrame(drawNetwork);
+            }
+
+            resizeCanvas();
+            window.addEventListener("resize", resizeCanvas, { passive: true });
+            document.addEventListener("visibilitychange", () => {
+                if (document.hidden) {
+                    cancelAnimationFrame(frameId);
+                } else {
+                    cancelAnimationFrame(frameId);
+                    frameId = requestAnimationFrame(drawNetwork);
+                }
+            });
+            drawNetwork();
+        });
+
+        const GOOGLE_SHEETS_FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbzWVwOYZmHlEl7Iau0SO7-IwaYHUjjihkICa0GYzgHZHxyqo9RQ9HyjM62RoOfaD7UU/exec";
+
+        function submitForm() {
+            const status = document.getElementById("formStatus");
+            const form = document.getElementById("inquiryForm");
+            if (!GOOGLE_SHEETS_FORM_ENDPOINT) {
+                status.textContent = "Google Sheets submissions are not enabled yet. The form needs the deployed Apps Script web-app URL.";
+                status.classList.remove("hidden");
+                return;
+            }
+
+            form.action = GOOGLE_SHEETS_FORM_ENDPOINT;
+            form.target = "_blank";
+            status.textContent = "Opening Google’s submission confirmation in a new tab…";
+            status.classList.remove("hidden");
+            form.submit();
+        }
+    </script>
+</body>
+</html>
