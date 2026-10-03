@@ -387,6 +387,144 @@
             outline: 2px solid white;
             outline-offset: 3px;
         }
+        .moments-gallery {
+            position: relative;
+            width: min(100%, 420px);
+            margin: 0 auto;
+            aspect-ratio: 5 / 7;
+            perspective: 1200px;
+        }
+        .moment-card {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 1rem;
+            background: #101010;
+            transform-style: preserve-3d;
+            cursor: pointer;
+            opacity: 0.72;
+            pointer-events: none;
+            transform: translate(calc(var(--deck-offset, 0) * 8px), calc(var(--deck-offset, 0) * 8px)) rotate(calc(var(--deck-offset, 0) * 2deg)) scale(calc(1 - var(--deck-offset, 0) * 0.035));
+            transform-origin: 50% 85%;
+            transition: transform 0.65s cubic-bezier(0.2, 0.75, 0.25, 1), border-color 0.35s ease, opacity 0.35s ease, filter 0.45s ease;
+            z-index: calc(10 - var(--deck-offset, 0));
+        }
+        .moment-card:nth-child(1) { --deck-offset: 0; }
+        .moment-card:nth-child(2) { --deck-offset: 1; }
+        .moment-card:nth-child(3) { --deck-offset: 2; }
+        .moment-card:nth-child(4) { --deck-offset: 3; }
+        .moment-card:nth-child(5) { --deck-offset: 4; }
+        .moment-card:nth-child(6) { --deck-offset: 5; }
+        .moments-gallery:not(.is-ready) .moment-card:first-child {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .moment-card.is-top {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .moments-gallery.is-ready .moment-card:not(.is-top) {
+            opacity: 0.72;
+        }
+        .moments-gallery.is-ready .moment-card.is-top {
+            opacity: 1;
+        }
+        .moment-card:focus-visible {
+            outline: 2px solid white;
+            outline-offset: 5px;
+        }
+        .moment-card.is-dealing {
+            z-index: 20;
+            pointer-events: none;
+            animation: moment-card-deal 720ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+        }
+        .moments-gallery.is-shuffling .moment-card:not(.is-dealing) {
+            animation: moment-deck-shuffle 620ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+            animation-delay: calc(var(--deck-offset, 0) * 35ms);
+        }
+        @keyframes moment-card-deal {
+            0% { transform: translate(0, 0) rotate(0) scale(1); opacity: 1; }
+            35% { transform: translate(-4%, -8%) rotate(-8deg) scale(1.04); opacity: 1; }
+            100% { transform: translate(115%, -12%) rotate(var(--deal-rotation, 18deg)) scale(0.82); opacity: 0; }
+        }
+        @keyframes moment-deck-shuffle {
+            0%, 100% { translate: 0 0; }
+            35% { translate: -10px -3px; }
+            70% { translate: 7px 2px; }
+        }
+        .moment-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: saturate(0.78) brightness(0.78);
+            transition: transform 0.9s cubic-bezier(0.2, 0.75, 0.25, 1), filter 0.6s ease;
+        }
+        .moment-card:nth-child(1) img { object-position: 56% center; }
+        .moment-card:nth-child(2) img { object-position: 32% center; }
+        .moment-card:nth-child(3) img { object-position: 56% center; }
+        .moment-card:nth-child(4) img { object-position: center 62%; }
+        .moment-card:nth-child(5) img { object-position: 51% center; }
+        .moment-card:nth-child(6) img { object-position: 48% center; }
+        .moment-card::before {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: linear-gradient(180deg, transparent 28%, rgba(0, 0, 0, 0.12) 48%, rgba(0, 0, 0, 0.76) 78%, #000 100%);
+            content: "";
+            pointer-events: none;
+        }
+        .moment-card::after {
+            position: absolute;
+            top: -30%;
+            bottom: -30%;
+            left: -70%;
+            z-index: 2;
+            width: 45%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+            content: "";
+            pointer-events: none;
+            transform: skewX(-18deg);
+            transition: left 0.75s ease;
+        }
+        .moment-card figcaption {
+            position: absolute;
+            right: 1rem;
+            bottom: 0.85rem;
+            left: 1rem;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: rgba(255, 255, 255, 0.9);
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 0.6rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+        .moment-card figcaption span:last-child {
+            color: rgba(255, 255, 255, 0.55);
+            font-variant-numeric: tabular-nums;
+        }
+        @media (hover: hover) and (pointer: fine) {
+            .moment-card.is-top:hover {
+                border-color: rgba(255, 255, 255, 0.48);
+                transform: translateY(-5px) rotateX(2deg) scale(1.015);
+            }
+            .moment-card.is-top:hover img {
+                filter: saturate(1) brightness(1);
+                transform: scale(1.08);
+            }
+            .moment-card.is-top:hover::after { left: 125%; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .moment-card { transform: translate(calc(var(--deck-offset, 0) * 4px), calc(var(--deck-offset, 0) * 4px)) scale(calc(1 - var(--deck-offset, 0) * 0.025)); }
+            .moment-card,
+            .moment-card img,
+            .moment-card::after { transition: none; }
+            .moment-card.is-dealing,
+            .moments-gallery.is-shuffling .moment-card:not(.is-dealing) { animation: none; }
+        }
         @media (prefers-reduced-motion: reduce) {
             .feedback-track { animation: none; transform: none; }
         }
@@ -473,7 +611,7 @@
                     <p class="max-w-md text-sm md:text-base text-theme-muted font-sans font-light leading-relaxed mb-12 reveal-element">
                         Bridging the gap between complex software and human capability. Specializing in Excel, Power BI, SQL, and AI Integration to automate the mundane and elevate decision-making algorithms.
                     </p>
-
+                    
                     <div class="flex flex-wrap gap-3 sm:gap-4 reveal-element">
                         <a href="#expertise" class="magnetic hover-trigger inline-flex items-center justify-center gap-2 bg-white px-5 py-4 text-[9px] font-bold uppercase tracking-[0.12em] text-black transition-colors hover:bg-gray-200 sm:px-8 sm:text-[10px] sm:tracking-[0.2em]">
                             Explore Systems <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -825,6 +963,46 @@
             </div>
         </section>
 
+        <!-- WORKSHOP MOMENTS -->
+        <section id="moments" class="border-y border-theme-borderLight bg-black/70 px-6 py-16 sm:py-20">
+            <div class="mx-auto max-w-7xl">
+                <div class="mb-8 flex flex-col gap-3 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                        <p class="mb-3 font-display text-[10px] font-semibold uppercase tracking-[0.3em] text-theme-muted">Workshop moments / 01—06</p>
+                        <h2 class="font-display text-3xl font-bold sm:text-4xl">Learning, in the room.</h2>
+                    </div>
+                    <p class="max-w-sm text-xs leading-5 text-theme-muted">A few frames from sessions built around curiosity, practice, and people.</p>
+                </div>
+                <div class="moments-gallery" id="moments-gallery" aria-label="Training photo deck">
+                    <figure class="moment-card">
+                        <img src="1.jpeg" alt="An instructor presenting a SQL bootcamp to a classroom" loading="lazy" decoding="async">
+                        <figcaption><span>Workshop community</span><span>01</span></figcaption>
+                    </figure>
+                    <figure class="moment-card">
+                        <img src="2.jpeg" alt="An instructor leading a classroom session" loading="lazy" decoding="async">
+                        <figcaption><span>Live learning</span><span>02</span></figcaption>
+                    </figure>
+                    <figure class="moment-card">
+                        <img src="3.jpeg" alt="An instructor explaining a presentation to learners" loading="lazy" decoding="async">
+                        <figcaption><span>Ideas in action</span><span>03</span></figcaption>
+                    </figure>
+                    <figure class="moment-card">
+                        <img src="4.jpeg" alt="A trainer presenting a lesson in a classroom" loading="lazy" decoding="async">
+                        <figcaption><span>Deep dive</span><span>04</span></figcaption>
+                    </figure>
+                    <figure class="moment-card">
+                        <img src="5.jpeg" alt="Learners and their instructor celebrating a session" loading="lazy" decoding="async">
+                        <figcaption><span>Shared progress</span><span>05</span></figcaption>
+                    </figure>
+                    <figure class="moment-card">
+                        <img src="6.jpeg" alt="A class of learners gathered together" loading="lazy" decoding="async">
+                        <figcaption><span>Learning together</span><span>06</span></figcaption>
+                    </figure>
+                </div>
+                <p class="mt-9 text-center font-display text-[10px] uppercase tracking-[0.18em] text-theme-muted" id="moments-deck-status" aria-live="off">Tap the top photo to deal the next card · 01 / 06</p>
+            </div>
+        </section>
+
         <!-- CONTACT SECTION -->
         <section id="contact" class="py-20 sm:py-24 lg:py-32 px-6 border-t border-theme-borderLight bg-black relative">
             <div class="max-w-4xl mx-auto reveal-element">
@@ -915,6 +1093,76 @@
             const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
             const hasGsap = typeof window.gsap !== "undefined";
             const hasScrollTrigger = hasGsap && typeof window.ScrollTrigger !== "undefined";
+
+            const momentsGallery = document.getElementById("moments-gallery");
+            const momentsDeckStatus = document.getElementById("moments-deck-status");
+            if (momentsGallery && momentsDeckStatus) {
+                const momentCards = Array.from(momentsGallery.querySelectorAll(".moment-card"));
+                let isDealing = false;
+                let dealCount = 0;
+                let deckIsVisible = !("IntersectionObserver" in window);
+
+                function updateMomentDeck() {
+                    momentCards.forEach((card, index) => {
+                        const isTopCard = index === 0;
+                        card.style.setProperty("--deck-offset", String(index));
+                        card.classList.toggle("is-top", isTopCard);
+                        card.setAttribute("role", "button");
+                        card.setAttribute("aria-roledescription", "card");
+                        card.setAttribute("aria-label", `${card.querySelector("img").alt}. Activate to deal the next photo.`);
+                        card.setAttribute("aria-hidden", String(!isTopCard));
+                        card.tabIndex = isTopCard ? 0 : -1;
+                        card.inert = !isTopCard;
+                    });
+                    momentsDeckStatus.textContent = `${reducedMotion ? "Tap the top photo to deal the next card" : "Auto shuffle · hover or focus to pause"} · ${String((dealCount % momentCards.length) + 1).padStart(2, "0")} / ${String(momentCards.length).padStart(2, "0")}`;
+                }
+
+                function dealNextCard(restoreFocus = false) {
+                    if (isDealing || momentCards.length < 2) return;
+                    isDealing = true;
+                    const dealtCard = momentCards[0];
+                    dealCount += 1;
+                    dealtCard.style.setProperty("--deal-rotation", dealCount % 2 ? "18deg" : "-18deg");
+                    dealtCard.classList.add("is-dealing");
+                    momentsGallery.classList.add("is-shuffling");
+
+                    window.setTimeout(() => {
+                        dealtCard.classList.remove("is-dealing");
+                        momentCards.push(momentCards.shift());
+                        updateMomentDeck();
+                        momentsGallery.classList.remove("is-shuffling");
+                        isDealing = false;
+                        if (restoreFocus) momentCards[0].focus({ preventScroll: true });
+                    }, reducedMotion ? 0 : 720);
+                }
+
+                momentCards.forEach(card => {
+                    card.addEventListener("click", () => {
+                        if (card.classList.contains("is-top")) dealNextCard(true);
+                    });
+                    card.addEventListener("keydown", event => {
+                        if (!card.classList.contains("is-top") || (event.key !== "Enter" && event.key !== " ")) return;
+                        event.preventDefault();
+                        dealNextCard(true);
+                    });
+                });
+                updateMomentDeck();
+                momentsGallery.classList.add("is-ready");
+
+                if (!reducedMotion && momentCards.length > 1) {
+                    if ("IntersectionObserver" in window) {
+                        const deckObserver = new IntersectionObserver(entries => {
+                            deckIsVisible = entries[0].isIntersecting;
+                        }, { threshold: 0.15 });
+                        deckObserver.observe(momentsGallery);
+                    }
+
+                    window.setInterval(() => {
+                        if (!deckIsVisible || document.hidden || momentsGallery.matches(":hover, :focus-within")) return;
+                        dealNextCard();
+                    }, 4600);
+                }
+            }
 
             const navToggle = document.getElementById("nav-toggle");
             const mobileMenu = document.getElementById("mobile-menu");
