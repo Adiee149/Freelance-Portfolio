@@ -315,6 +315,54 @@
             outline: none;
         }
         .input-cyber::placeholder { color: #777; }
+        .form-status {
+            align-items: flex-start;
+            gap: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 0.75rem;
+            background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.015));
+            padding: 1rem 1.1rem;
+            animation: form-status-enter 0.4s cubic-bezier(0.2, 0.75, 0.25, 1) both;
+        }
+        .form-status:not(.hidden) { display: flex; }
+        .form-status[data-state="success"] {
+            border-color: rgba(110, 231, 183, 0.28);
+            background: linear-gradient(110deg, rgba(16, 185, 129, 0.12), rgba(16, 185, 129, 0.025) 72%);
+        }
+        .form-status[data-state="error"] {
+            border-color: rgba(252, 165, 165, 0.28);
+            background: linear-gradient(110deg, rgba(239, 68, 68, 0.12), rgba(239, 68, 68, 0.025) 72%);
+        }
+        .form-status-icon {
+            display: grid;
+            width: 2.5rem;
+            height: 2.5rem;
+            flex: none;
+            place-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            color: #fbbf24;
+        }
+        .form-status[data-state="success"] .form-status-icon { color: #6ee7b7; }
+        .form-status[data-state="error"] .form-status-icon { color: #fca5a5; }
+        .form-status-icon svg { width: 1.1rem; height: 1.1rem; }
+        .form-status-success,
+        .form-status-error,
+        .form-status-spinner { display: none; }
+        .form-status[data-state="success"] .form-status-success,
+        .form-status[data-state="error"] .form-status-error,
+        .form-status[data-state="pending"] .form-status-spinner { display: block; }
+        .form-status[data-state="pending"] .form-status-spinner { animation: form-status-spin 1s linear infinite; }
+        @keyframes form-status-enter {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes form-status-spin { to { transform: rotate(360deg); } }
+        @media (prefers-reduced-motion: reduce) {
+            .form-status { animation: none; }
+            .form-status[data-state="pending"] .form-status-spinner { animation: none; }
+        }
         .contact-label {
             display: block;
             margin-bottom: 0.65rem;
@@ -355,19 +403,69 @@
             border-color: rgba(255, 255, 255, 0.3);
             background-color: rgba(255,255,255,0.025);
         }
+        .hero-booking-cta {
+            position: relative;
+            isolation: isolate;
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.16), 0 8px 32px rgba(255, 255, 255, 0.12);
+            transition: background-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+        }
+        .hero-booking-cta:hover {
+            background-color: #e5e7eb;
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3), 0 10px 42px rgba(255, 255, 255, 0.2);
+        }
+        .hero-booking-cta::before {
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(110deg, transparent 20%, rgba(255,255,255,0.68) 48%, transparent 76%);
+            content: "";
+            transform: translateX(-140%);
+            transition: transform 0.8s cubic-bezier(0.2, 0.75, 0.25, 1);
+        }
+        .hero-booking-cta:hover::before { transform: translateX(140%); }
+        .hero-booking-cta .hero-booking-arrow {
+            display: grid;
+            width: 2.25rem;
+            height: 2.25rem;
+            flex: none;
+            place-items: center;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .hero-booking-cta:hover .hero-booking-arrow {
+            transform: translate(3px, -3px);
+            background: rgba(0, 0, 0, 0.14);
+        }
+        .hero-eyebrow {
+            color: rgba(255, 255, 255, 0.78);
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .hero-booking-cta::before { transition: none; }
+            .hero-booking-cta .hero-booking-arrow { transition: none; }
+        }
         .feedback-card {
             display: flex;
-            width: min(82vw, 350px);
+            width: min(82vw, 330px);
             min-height: 300px;
             flex-direction: column;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: linear-gradient(145deg, rgba(255,255,255,0.035), rgba(255,255,255,0.008));
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 0.9rem;
+            background: linear-gradient(145deg, rgba(255,255,255,0.055), rgba(255,255,255,0.012));
             padding: 1.5rem;
+            transition: border-color 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+        }
+        .feedback-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.3);
+            background-color: rgba(255,255,255,0.025);
         }
         .feedback-viewport {
             overflow-x: auto;
             overscroll-behavior-inline: contain;
             scrollbar-width: none;
+            mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+            -webkit-mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
         }
         .feedback-viewport::-webkit-scrollbar { display: none; }
         .feedback-track, .feedback-group {
@@ -379,7 +477,7 @@
             animation: feedback-marquee var(--feedback-duration, 120s) linear infinite;
             will-change: transform;
         }
-        .feedback-group { gap: 1rem; }
+        .feedback-group { gap: 1rem; padding-block: 0.5rem; }
         @keyframes feedback-marquee {
             to { transform: translateX(-50%); }
         }
@@ -387,143 +485,172 @@
             outline: 2px solid white;
             outline-offset: 3px;
         }
+        #navbar {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(0, 0, 0, 0.38);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: background-color 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease, padding 0.3s ease;
+        }
+        #navbar.is-scrolled {
+            border-bottom-color: rgba(255, 255, 255, 0.12);
+            background: rgba(0, 0, 0, 0.78);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            padding-block: 1rem;
+        }
         .moments-gallery {
             position: relative;
-            width: min(100%, 420px);
-            margin: 0 auto;
-            aspect-ratio: 5 / 7;
-            perspective: 1200px;
+            height: clamp(26rem, 58vw, 42rem);
+            overflow: hidden;
+            isolation: isolate;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 1.25rem;
+            background:
+                radial-gradient(ellipse at 50% 45%, rgba(255, 255, 255, 0.1), transparent 56%),
+                linear-gradient(145deg, #111, #050505 70%);
+            box-shadow: 0 24px 90px rgba(0, 0, 0, 0.4), inset 0 1px rgba(255, 255, 255, 0.08);
         }
         .moment-card {
             position: absolute;
             inset: 0;
+            display: grid;
+            place-items: center;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 1rem;
-            background: #101010;
-            transform-style: preserve-3d;
-            cursor: pointer;
-            opacity: 0.72;
+            padding: clamp(1rem, 4vw, 3.5rem);
+            opacity: 0;
+            visibility: hidden;
+            transform: translate3d(2.5rem, 0, 0) scale(0.97);
+            filter: blur(8px);
+            transition: opacity 0.75s ease, transform 1s cubic-bezier(0.2, 0.75, 0.25, 1), filter 0.75s ease, visibility 0s linear 0.75s;
             pointer-events: none;
-            transform: translate(calc(var(--deck-offset, 0) * 8px), calc(var(--deck-offset, 0) * 8px)) rotate(calc(var(--deck-offset, 0) * 2deg)) scale(calc(1 - var(--deck-offset, 0) * 0.035));
-            transform-origin: 50% 85%;
-            transition: transform 0.65s cubic-bezier(0.2, 0.75, 0.25, 1), border-color 0.35s ease, opacity 0.35s ease, filter 0.45s ease;
-            z-index: calc(10 - var(--deck-offset, 0));
         }
-        .moment-card:nth-child(1) { --deck-offset: 0; }
-        .moment-card:nth-child(2) { --deck-offset: 1; }
-        .moment-card:nth-child(3) { --deck-offset: 2; }
-        .moment-card:nth-child(4) { --deck-offset: 3; }
-        .moment-card:nth-child(5) { --deck-offset: 4; }
-        .moment-card:nth-child(6) { --deck-offset: 5; }
-        .moments-gallery:not(.is-ready) .moment-card:first-child {
+        .moment-card.is-active {
+            z-index: 2;
             opacity: 1;
-            pointer-events: auto;
+            visibility: visible;
+            transform: translate3d(0, 0, 0) scale(1);
+            filter: blur(0);
+            transition-delay: 0s;
         }
-        .moment-card.is-top {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .moments-gallery.is-ready .moment-card:not(.is-top) {
-            opacity: 0.72;
-        }
-        .moments-gallery.is-ready .moment-card.is-top {
-            opacity: 1;
-        }
-        .moment-card:focus-visible {
-            outline: 2px solid white;
-            outline-offset: 5px;
-        }
-        .moment-card.is-dealing {
-            z-index: 20;
-            pointer-events: none;
-            animation: moment-card-deal 720ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
-        }
-        .moments-gallery.is-shuffling .moment-card:not(.is-dealing) {
-            animation: moment-deck-shuffle 620ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
-            animation-delay: calc(var(--deck-offset, 0) * 35ms);
-        }
-        @keyframes moment-card-deal {
-            0% { transform: translate(0, 0) rotate(0) scale(1); opacity: 1; }
-            35% { transform: translate(-4%, -8%) rotate(-8deg) scale(1.04); opacity: 1; }
-            100% { transform: translate(115%, -12%) rotate(var(--deal-rotation, 18deg)) scale(0.82); opacity: 0; }
-        }
-        @keyframes moment-deck-shuffle {
-            0%, 100% { translate: 0 0; }
-            35% { translate: -10px -3px; }
-            70% { translate: 7px 2px; }
+        .moment-card.is-leaving {
+            z-index: 1;
+            opacity: 0;
+            visibility: visible;
+            transform: translate3d(-2rem, 0, 0) scale(1.025);
+            filter: blur(8px);
+            transition-delay: 0s;
         }
         .moment-card img {
+            position: absolute;
+            z-index: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            filter: saturate(0.78) brightness(0.78);
-            transition: transform 0.9s cubic-bezier(0.2, 0.75, 0.25, 1), filter 0.6s ease;
+            object-fit: contain;
         }
-        .moment-card:nth-child(1) img { object-position: 56% center; }
-        .moment-card:nth-child(2) img { object-position: 32% center; }
-        .moment-card:nth-child(3) img { object-position: 56% center; }
-        .moment-card:nth-child(4) img { object-position: center 62%; }
-        .moment-card:nth-child(5) img { object-position: 51% center; }
-        .moment-card:nth-child(6) img { object-position: 48% center; }
+        .moment-card .moment-backdrop {
+            z-index: 0;
+            object-fit: cover;
+            opacity: 0.24;
+            filter: blur(28px) saturate(0.8) brightness(0.55);
+            transform: scale(1.12);
+        }
+        .moment-card .moment-image {
+            z-index: 1;
+            filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.42));
+        }
         .moment-card::before {
             position: absolute;
             inset: 0;
-            z-index: 1;
-            background: linear-gradient(180deg, transparent 28%, rgba(0, 0, 0, 0.12) 48%, rgba(0, 0, 0, 0.76) 78%, #000 100%);
-            content: "";
-            pointer-events: none;
-        }
-        .moment-card::after {
-            position: absolute;
-            top: -30%;
-            bottom: -30%;
-            left: -70%;
             z-index: 2;
-            width: 45%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.2), transparent 24%, transparent 76%, rgba(0, 0, 0, 0.2));
             content: "";
             pointer-events: none;
-            transform: skewX(-18deg);
-            transition: left 0.75s ease;
         }
         .moment-card figcaption {
             position: absolute;
-            right: 1rem;
-            bottom: 0.85rem;
-            left: 1rem;
+            right: clamp(1rem, 4vw, 3rem);
+            bottom: clamp(1rem, 4vw, 2.5rem);
+            left: clamp(1rem, 4vw, 3rem);
             z-index: 3;
+            color: rgba(255, 255, 255, 0.75);
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 0.6rem;
+            font-weight: 500;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.85);
+        }
+        .moments-controls {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            color: rgba(255, 255, 255, 0.9);
-            font-family: "Space Grotesk", sans-serif;
-            font-size: 0.6rem;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
+            gap: 1.5rem;
+            padding: 1rem 0.25rem 0;
         }
-        .moment-card figcaption span:last-child {
-            color: rgba(255, 255, 255, 0.55);
-            font-variant-numeric: tabular-nums;
+        .moments-progress {
+            display: flex;
+            flex: 1;
+            max-width: 28rem;
+            gap: 0.5rem;
         }
-        @media (hover: hover) and (pointer: fine) {
-            .moment-card.is-top:hover {
-                border-color: rgba(255, 255, 255, 0.48);
-                transform: translateY(-5px) rotateX(2deg) scale(1.015);
-            }
-            .moment-card.is-top:hover img {
-                filter: saturate(1) brightness(1);
-                transform: scale(1.08);
-            }
-            .moment-card.is-top:hover::after { left: 125%; }
+        .moments-progress button {
+            position: relative;
+            height: 1.5rem;
+            flex: 1;
+            cursor: pointer;
+        }
+        .moments-progress button::before,
+        .moments-progress button::after {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+            content: "";
+            transform: translateY(-50%);
+        }
+        .moments-progress button::after {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-50%) scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+        .moments-progress button[aria-current="true"]::after { transform: translateY(-50%) scaleX(1); }
+        .moments-progress button:focus-visible,
+        .moments-control:focus-visible {
+            outline: 2px solid white;
+            outline-offset: 4px;
+        }
+        .moments-control {
+            display: grid;
+            width: 2.75rem;
+            height: 2.75rem;
+            flex: none;
+            place-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.04);
+            color: white;
+            transition: background-color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+        }
+        .moments-control:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.55);
+            background: rgba(255, 255, 255, 0.12);
+        }
+        .moments-control svg { width: 1rem; height: 1rem; }
+        @media (max-width: 640px) {
+            .moments-gallery { height: clamp(24rem, 105vw, 34rem); }
+            .moments-controls { gap: 0.75rem; }
+            .moments-control { width: 2.5rem; height: 2.5rem; }
         }
         @media (prefers-reduced-motion: reduce) {
-            .moment-card { transform: translate(calc(var(--deck-offset, 0) * 4px), calc(var(--deck-offset, 0) * 4px)) scale(calc(1 - var(--deck-offset, 0) * 0.025)); }
             .moment-card,
-            .moment-card img,
-            .moment-card::after { transition: none; }
-            .moment-card.is-dealing,
-            .moments-gallery.is-shuffling .moment-card:not(.is-dealing) { animation: none; }
+            .moments-progress button::after,
+            .moments-control,
+            .feedback-card { transition: none; }
         }
         @media (prefers-reduced-motion: reduce) {
             .feedback-track { animation: none; transform: none; }
@@ -553,10 +680,10 @@
     <div class="fixed inset-0 w-full h-full pointer-events-none z-0 bg-grid-pattern bg-grid opacity-30"></div>
 
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-50 mix-blend-difference py-6 transition-all duration-300" id="navbar">
+    <nav class="fixed top-0 w-full z-50 py-6 transition-all duration-300" id="navbar">
         <div class="max-w-7xl mx-auto px-6 flex justify-between items-center relative">
             <a href="#hero" class="font-display font-bold tracking-[0.2em] uppercase text-white text-sm magnetic hover-trigger">
-                [ Purnaditya ]
+                [ AD ]
             </a>
             <nav aria-label="Main navigation" class="hidden md:flex gap-10 text-[10px] tracking-widest uppercase font-medium text-theme-muted font-display">
                 <a href="#about" class="hover:text-white transition-colors hover-trigger">01. About</a>
@@ -583,41 +710,42 @@
     <main class="relative z-10">
         
         <!-- HERO SECTION -->
-        <section id="hero" class="min-h-screen flex flex-col justify-start px-4 sm:px-6 relative pt-24 pb-16 lg:justify-center lg:pt-20 lg:pb-0">
+        <section id="hero" class="min-h-screen flex flex-col justify-start px-4 sm:px-6 relative pt-24 pb-16 lg:justify-start lg:pt-28 lg:pb-8">
             <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 items-center">
                 
                 <!-- Text Content -->
                 <div class="lg:col-span-7 order-2 lg:order-1 relative z-20 -mt-40 sm:-mt-48 lg:mt-0">
-                    <div class="flex items-center gap-3 mb-6 sm:mb-8 reveal-element">
-                        <div class="h-[1px] w-12 bg-white"></div>
-                        <p class="font-display text-theme-muted uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[10px] font-semibold">
+                    <div class="hero-eyebrow flex items-center gap-3 mb-6 sm:mb-8 lg:mb-4">
+                        <div class="h-[1px] w-12 bg-white/80" aria-hidden="true"></div>
+                        <p class="font-display uppercase tracking-[0.16em] sm:tracking-[0.24em] text-[10px] font-semibold">
                             System Architecture & Intelligence
                         </p>
                     </div>
                     
-                    <h1 class="font-display text-[clamp(2.5rem,10vw,3rem)] sm:text-5xl md:text-7xl lg:text-[5.5rem] font-bold tracking-tighter text-white leading-[1.05] mb-6">
+                    <h1 class="font-display text-[clamp(2.5rem,10vw,3rem)] sm:text-5xl md:text-7xl lg:text-[3.75rem] xl:text-[4rem] font-bold tracking-tighter text-white leading-[1.02] mb-4 lg:mb-2">
                         <div class="overflow-hidden"><span class="inline-block reveal-text">Engineering</span></div>
                         <div class="overflow-hidden"><span class="inline-block reveal-text text-theme-muted">Ideas,</span></div>
                         <div class="overflow-hidden"><span class="inline-block reveal-text">Building</span></div>
                         <div class="overflow-hidden"><span class="inline-block reveal-text text-theme-muted">Intelligence.</span></div>
                     </h1>
                     
-                    <div class="font-display text-base sm:text-lg md:text-xl font-light text-theme-muted mb-8 sm:mb-10 flex flex-wrap items-center gap-x-3 gap-y-1 reveal-element">
+                    <div class="font-display text-base sm:text-lg md:text-xl font-light text-theme-muted mb-8 sm:mb-10 lg:mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 reveal-element">
                         <span>&gt; I'M:</span>
                         <!-- Scrambler Text Container -->
                         <span id="scramble-text" class="text-white font-medium tracking-wide" aria-live="polite" aria-atomic="true">DATA ANALYTICS EXPERT</span><span class="animate-pulse" aria-hidden="true">_</span>
                     </div>
 
-                    <p class="max-w-md text-sm md:text-base text-theme-muted font-sans font-light leading-relaxed mb-12 reveal-element">
+                    <p class="max-w-md text-sm md:text-base text-theme-muted font-sans font-light leading-relaxed mb-12 lg:mb-5 reveal-element">
                         Bridging the gap between complex software and human capability. Specializing in Excel, Power BI, SQL, and AI Integration to automate the mundane and elevate decision-making algorithms.
                     </p>
                     
                     <div class="flex flex-wrap gap-3 sm:gap-4 reveal-element">
-                        <a href="#expertise" class="magnetic hover-trigger inline-flex items-center justify-center gap-2 bg-white px-5 py-4 text-[9px] font-bold uppercase tracking-[0.12em] text-black transition-colors hover:bg-gray-200 sm:px-8 sm:text-[10px] sm:tracking-[0.2em]">
-                            Explore Systems <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        <a href="#contact" class="hero-booking-cta magnetic hover-trigger inline-flex items-center justify-center gap-3 bg-white px-5 py-4 text-[9px] font-bold uppercase tracking-[0.12em] text-black sm:px-7 sm:text-[10px] sm:tracking-[0.16em]">
+                            <span>Book an Enquiry</span>
+                            <span class="hero-booking-arrow" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17 17 7M7 7h10v10"/></svg></span>
                         </a>
-                        <a href="#contact" class="magnetic hover-trigger inline-flex items-center justify-center gap-2 border border-white/30 px-5 py-4 text-[9px] font-bold uppercase tracking-[0.12em] text-white transition-colors hover:border-white hover:bg-white/10 sm:px-8 sm:text-[10px] sm:tracking-[0.2em]">
-                            Book an appointment <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>
+                        <a href="#expertise" class="magnetic hover-trigger inline-flex items-center justify-center gap-2 border border-white/30 px-5 py-4 text-[9px] font-bold uppercase tracking-[0.12em] text-white transition-all hover:border-white hover:bg-white/10 sm:px-8 sm:text-[10px] sm:tracking-[0.2em]">
+                            Explore Systems <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                         </a>
                     </div>
                 </div>
@@ -765,7 +893,7 @@
                         <h2 class="font-display text-4xl md:text-5xl font-bold reveal-element">Real learning. In their words.</h2>
                     </div>
                     <div class="flex items-center gap-5 reveal-element">
-                        <p class="max-w-sm text-sm leading-6 text-theme-muted">Feedback shared by learners across analytics, AI, Excel, and presentation courses.</p>
+                        <p class="max-w-sm text-sm leading-6 text-theme-muted">Twenty learner reviews across analytics, AI, Excel, and presentation courses—scrolling on a continuous loop.</p>
                         <button id="feedback-toggle" type="button" class="feedback-pause shrink-0 border border-theme-borderLight px-4 py-3 font-display text-[9px] font-bold uppercase tracking-[0.16em] text-white transition-colors hover:border-white" aria-pressed="false" aria-label="Pause feedback auto-scroll">Pause</button>
                     </div>
                 </div>
@@ -860,6 +988,96 @@
                                 <figcaption class="mt-8 border-t border-white/10 pt-4">
                                     <p class="font-display text-sm font-semibold text-white">Shriya</p>
                                     <p class="mt-1 font-display text-[9px] uppercase tracking-[0.16em] text-theme-muted">PowerPoint mastery</p>
+                                </figcaption>
+                            </figure>
+
+                            <figure class="feedback-card reveal-element">
+                                <span class="font-display text-4xl leading-none text-white/30" aria-hidden="true">“</span>
+                                <blockquote class="mt-3 flex-1 text-sm leading-7 text-white/85">“Honestly, at first I had no idea what Claude was, but after attending this course, I learned about Claude in depth — and it's because of you (referring to Claude/the course) that I learned it. By the grace of God, this has been really useful to me, and among all the AI agents I've seen, this is the most efficient one I've come across. So I'm really impressed by your outside knowledge and your content knowledge, sir.”</blockquote>
+                                <figcaption class="mt-8 border-t border-white/10 pt-4">
+                                    <p class="font-display text-sm font-semibold text-white">Bathula Nithya Sri</p>
+                                    <p class="mt-1 font-display text-[9px] uppercase tracking-[0.16em] text-theme-muted">Claude AI workshop</p>
+                                </figcaption>
+                            </figure>
+
+                            <figure class="feedback-card reveal-element">
+                                <span class="font-display text-4xl leading-none text-white/30" aria-hidden="true">“</span>
+                                <blockquote class="mt-3 flex-1 text-sm leading-7 text-white/85">“At first, I thought Claude was just another AI like ChatGPT that could only be used for normal conversations. But after listening to the way you explained it, I learned how to use Claude effectively and understood its capabilities much better. Thank you for giving this wonderful session and helping me learn something new.”</blockquote>
+                                <figcaption class="mt-8 border-t border-white/10 pt-4">
+                                    <p class="font-display text-sm font-semibold text-white">Jajjara Shaini</p>
+                                    <p class="mt-1 font-display text-[9px] uppercase tracking-[0.16em] text-theme-muted">Claude AI workshop</p>
+                                </figcaption>
+                            </figure>
+
+                            <figure class="feedback-card reveal-element">
+                                <span class="font-display text-4xl leading-none text-white/30" aria-hidden="true">“</span>
+                                <blockquote class="mt-3 flex-1 text-sm leading-7 text-white/85">“Excellent workshop that was very interesting and interactive .More than that your patience to explain each and every topic was fabulous sir . These 2 days was most interesting days and no boring hours.Thank you so much sir for the knowledge and experience and some out of knowledge you have shared .”</blockquote>
+                                <figcaption class="mt-8 border-t border-white/10 pt-4">
+                                    <p class="font-display text-sm font-semibold text-white">Jogi Keerthi</p>
+                                    <p class="mt-1 font-display text-[9px] uppercase tracking-[0.16em] text-theme-muted">Claude AI workshop</p>
+                                </figcaption>
+                            </figure>
+
+                            <figure class="feedback-card reveal-element">
+                                <span class="font-display text-4xl leading-none text-white/30" aria-hidden="true">“</span>
+                                <blockquote class="mt-3 flex-1 text-sm leading-7 text-white/85">“Sir, you are a very good and supportive teacher. Your way of explaining concepts is clear and easy to understand. You are patient, friendly, and always encourage us to learn and improve. Thank you, sir, for your valuable guidance and support”</blockquote>
+                                <figcaption class="mt-8 border-t border-white/10 pt-4">
+                                    <p class="font-display text-sm font-semibold text-white">SHAIK BASHA PARVEEN</p>
+                                    <p class="mt-1 font-display text-[9px] uppercase tracking-[0.16em] text-theme-muted">Data analytics workshop</p>
+                                </figcaption>
+                            </figure>
+
+                            <figure class="feedback-card reveal-element">
+                                <span class="font-display text-4xl leading-none text-white/30" aria-hidden="true">“</span>
+                                <blockquote class="mt-3 flex-1 text-sm leading-7 text-white/85">“Thank you for your valuable time and efforts The workshop was truly enriching I'm very grateful for your guidance I have learned a lot about Data Analytics in the real world I am looking forward to the GPT AI Mastery course”</blockquote>
+                                <figcaption class="mt-8 border-t border-white/10 pt-4">
+                                    <p class="font-display text-sm font-semibold text-white">A Sivadurga</p>
+                                    <p class="mt-1 font-display text-[9px] uppercase tracking-[0.16em] text-theme-muted">Data analytics workshop</p>
+                                </figcaption>
+                            </figure>
+
+                            <figure class="feedback-card reveal-element">
+                                <span class="font-display text-4xl leading-none text-white/30" aria-hidden="true">“</span>
+                                <blockquote class="mt-3 flex-1 text-sm leading-7 text-white/85">“I am really happy to join this session today I learn new things I don't know and I learn how to be a consistency like you sir and politeness and obedience and communication and I will push pass my limits thank you sir”</blockquote>
+                                <figcaption class="mt-8 border-t border-white/10 pt-4">
+                                    <p class="font-display text-sm font-semibold text-white">Pasupuleti Rajarao</p>
+                                    <p class="mt-1 font-display text-[9px] uppercase tracking-[0.16em] text-theme-muted">Data analytics workshop</p>
+                                </figcaption>
+                            </figure>
+
+                            <figure class="feedback-card reveal-element">
+                                <span class="font-display text-4xl leading-none text-white/30" aria-hidden="true">“</span>
+                                <blockquote class="mt-3 flex-1 text-sm leading-7 text-white/85">“The explanation is very good , and it is going very interesting not boring, you reached well sir, and I learned all about the claude and it is awesome, thank you for the wonderful content delivered by you sir.”</blockquote>
+                                <figcaption class="mt-8 border-t border-white/10 pt-4">
+                                    <p class="font-display text-sm font-semibold text-white">Kamineni Tirumaleswara Rao</p>
+                                    <p class="mt-1 font-display text-[9px] uppercase tracking-[0.16em] text-theme-muted">Claude AI workshop</p>
+                                </figcaption>
+                            </figure>
+
+                            <figure class="feedback-card reveal-element">
+                                <span class="font-display text-4xl leading-none text-white/30" aria-hidden="true">“</span>
+                                <blockquote class="mt-3 flex-1 text-sm leading-7 text-white/85">“Sir the data analytic classes are very interesting and we understanding a lot.we explained a very cleary and easily the classes are very helping for improving our knowledge and skills”</blockquote>
+                                <figcaption class="mt-8 border-t border-white/10 pt-4">
+                                    <p class="font-display text-sm font-semibold text-white">Sk Nadiya</p>
+                                    <p class="mt-1 font-display text-[9px] uppercase tracking-[0.16em] text-theme-muted">Data analytics workshop</p>
+                                </figcaption>
+                            </figure>
+
+                            <figure class="feedback-card reveal-element">
+                                <span class="font-display text-4xl leading-none text-white/30" aria-hidden="true">“</span>
+                                <blockquote class="mt-3 flex-1 text-sm leading-7 text-white/85">“I have learned new Cocepts which helps me more amd mostly I have improved my confidence and consistency level through this session thankyou sir for spending your time with us”</blockquote>
+                                <figcaption class="mt-8 border-t border-white/10 pt-4">
+                                    <p class="font-display text-sm font-semibold text-white">Aradhyula yamuna</p>
+                                    <p class="mt-1 font-display text-[9px] uppercase tracking-[0.16em] text-theme-muted">Data analytics workshop</p>
+                                </figcaption>
+                            </figure>
+
+                            <figure class="feedback-card reveal-element">
+                                <span class="font-display text-4xl leading-none text-white/30" aria-hidden="true">“</span>
+                                <blockquote class="mt-3 flex-1 text-sm leading-7 text-white/85">“It is very much useful to get the knowledge and hands on experience on DATA ANALYTICS.And teaching and being responsible of you is very very better sir.thank you”</blockquote>
+                                <figcaption class="mt-8 border-t border-white/10 pt-4">
+                                    <p class="font-display text-sm font-semibold text-white">Tallapogu Indian Raju</p>
+                                    <p class="mt-1 font-display text-[9px] uppercase tracking-[0.16em] text-theme-muted">Data analytics workshop</p>
                                 </figcaption>
                             </figure>
                         </div>
@@ -968,38 +1186,62 @@
             <div class="mx-auto max-w-7xl">
                 <div class="mb-8 flex flex-col gap-3 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                        <p class="mb-3 font-display text-[10px] font-semibold uppercase tracking-[0.3em] text-theme-muted">Workshop moments / 01—06</p>
+                        <p class="mb-3 font-display text-[10px] font-semibold uppercase tracking-[0.3em] text-theme-muted">Workshop moments</p>
                         <h2 class="font-display text-3xl font-bold sm:text-4xl">Learning, in the room.</h2>
                     </div>
                     <p class="max-w-sm text-xs leading-5 text-theme-muted">A few frames from sessions built around curiosity, practice, and people.</p>
                 </div>
-                <div class="moments-gallery" id="moments-gallery" aria-label="Training photo deck">
-                    <figure class="moment-card">
-                        <img src="1.jpeg" alt="An instructor presenting a SQL bootcamp to a classroom" loading="lazy" decoding="async">
-                        <figcaption><span>Workshop community</span><span>01</span></figcaption>
+                <div class="moments-gallery" id="moments-gallery" role="region" aria-label="Workshop photo showcase" tabindex="0">
+                    <figure class="moment-card is-active" aria-hidden="false">
+                        <img class="moment-backdrop" src="1.jpeg" alt="" aria-hidden="true" decoding="async">
+                        <img class="moment-image" src="1.jpeg" alt="An instructor presenting a SQL bootcamp to a classroom" decoding="async">
+                        <figcaption><span>Workshop community</span></figcaption>
                     </figure>
-                    <figure class="moment-card">
-                        <img src="2.jpeg" alt="An instructor leading a classroom session" loading="lazy" decoding="async">
-                        <figcaption><span>Live learning</span><span>02</span></figcaption>
+                    <figure class="moment-card" aria-hidden="true" inert>
+                        <img class="moment-backdrop" src="2.jpeg" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                        <img class="moment-image" src="2.jpeg" alt="An instructor leading a classroom session" loading="lazy" decoding="async">
+                        <figcaption><span>Live learning</span></figcaption>
                     </figure>
-                    <figure class="moment-card">
-                        <img src="3.jpeg" alt="An instructor explaining a presentation to learners" loading="lazy" decoding="async">
-                        <figcaption><span>Ideas in action</span><span>03</span></figcaption>
+                    <figure class="moment-card" aria-hidden="true" inert>
+                        <img class="moment-backdrop" src="3.jpeg" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                        <img class="moment-image" src="3.jpeg" alt="An instructor explaining a presentation to learners" loading="lazy" decoding="async">
+                        <figcaption><span>Ideas in action</span></figcaption>
                     </figure>
-                    <figure class="moment-card">
-                        <img src="4.jpeg" alt="A trainer presenting a lesson in a classroom" loading="lazy" decoding="async">
-                        <figcaption><span>Deep dive</span><span>04</span></figcaption>
+                    <figure class="moment-card" aria-hidden="true" inert>
+                        <img class="moment-backdrop" src="4.jpeg" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                        <img class="moment-image" src="4.jpeg" alt="A trainer presenting a lesson in a classroom" loading="lazy" decoding="async">
+                        <figcaption><span>Deep dive</span></figcaption>
                     </figure>
-                    <figure class="moment-card">
-                        <img src="5.jpeg" alt="Learners and their instructor celebrating a session" loading="lazy" decoding="async">
-                        <figcaption><span>Shared progress</span><span>05</span></figcaption>
+                    <figure class="moment-card" aria-hidden="true" inert>
+                        <img class="moment-backdrop" src="5.jpeg" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                        <img class="moment-image" src="5.jpeg" alt="Learners and their instructor celebrating a session" loading="lazy" decoding="async">
+                        <figcaption><span>Shared progress</span></figcaption>
                     </figure>
-                    <figure class="moment-card">
-                        <img src="6.jpeg" alt="A class of learners gathered together" loading="lazy" decoding="async">
-                        <figcaption><span>Learning together</span><span>06</span></figcaption>
+                    <figure class="moment-card" aria-hidden="true" inert>
+                        <img class="moment-backdrop" src="6.jpeg" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                        <img class="moment-image" src="6.jpeg" alt="A class of learners gathered together" loading="lazy" decoding="async">
+                        <figcaption><span>Learning together</span></figcaption>
                     </figure>
                 </div>
-                <p class="mt-9 text-center font-display text-[10px] uppercase tracking-[0.18em] text-theme-muted" id="moments-deck-status" aria-live="off">Tap the top photo to deal the next card · 01 / 06</p>
+                <div class="moments-controls" aria-label="Workshop photo controls">
+                    <button class="moments-control" id="moments-previous" type="button" aria-label="Previous photo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M19 12H5m0 0 7-7m-7 7 7 7"/></svg>
+                    </button>
+                    <div class="moments-progress" role="group" aria-label="Choose a workshop photo">
+                        <button type="button" aria-label="Show Workshop community photo" aria-current="true"></button>
+                        <button type="button" aria-label="Show Live learning photo" aria-current="false"></button>
+                        <button type="button" aria-label="Show Ideas in action photo" aria-current="false"></button>
+                        <button type="button" aria-label="Show Deep dive photo" aria-current="false"></button>
+                        <button type="button" aria-label="Show Shared progress photo" aria-current="false"></button>
+                        <button type="button" aria-label="Show Learning together photo" aria-current="false"></button>
+                    </div>
+                    <button class="moments-control" id="moments-toggle" type="button" aria-label="Pause automatic photo changes" aria-pressed="false">
+                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5h3v14H8zm5 0h3v14h-3z"/></svg>
+                    </button>
+                    <button class="moments-control" id="moments-next" type="button" aria-label="Next photo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14m0 0-7-7m7 7-7 7"/></svg>
+                    </button>
+                </div>
             </div>
         </section>
 
@@ -1040,8 +1282,8 @@
                             </div>
 
                             <div>
-                                <label for="contact-organization" class="contact-label">Organization <span class="normal-case tracking-normal">(optional)</span></label>
-                                <input id="contact-organization" name="organization" type="text" autocomplete="organization" class="input-cyber" placeholder="Company or institution">
+                                <label for="contact-organization" class="contact-label">Organization</label>
+                                <input id="contact-organization" name="organization" type="text" autocomplete="organization" required class="input-cyber" placeholder="Company or institution">
                             </div>
 
                             <div>
@@ -1056,8 +1298,8 @@
                             </div>
 
                             <div class="md:col-span-2">
-                                <label for="contact-details" class="contact-label">How can I help?</label>
-                                <textarea id="contact-details" name="details" rows="5" maxlength="2000" class="input-cyber min-h-[9rem] resize-y" placeholder="Tell me a little about your goals, audience, or preferred course."></textarea>
+                                <label for="contact-details" class="contact-label">Brief about your enquiry</label>
+                                <textarea id="contact-details" name="details" rows="5" maxlength="2000" required class="input-cyber min-h-[9rem] resize-y" placeholder="Share a brief overview of what you need and your goals."></textarea>
                             </div>
                         </div>
                         
@@ -1070,9 +1312,20 @@
                                 View LinkedIn Node <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                             </a>
                             </div>
-                            <p id="formStatus" class="font-display text-xs leading-5 text-amber-200 hidden" role="status" aria-live="polite"></p>
+                            <div id="formStatus" class="form-status hidden" role="status" aria-live="polite" aria-atomic="true">
+                                <span class="form-status-icon" aria-hidden="true">
+                                    <svg class="form-status-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"/></svg>
+                                    <svg class="form-status-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9" opacity=".25"/><path d="M21 12a9 9 0 0 0-9-9"/></svg>
+                                    <svg class="form-status-error" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v5m0 3h.01"/><circle cx="12" cy="12" r="9"/></svg>
+                                </span>
+                                <span class="min-w-0">
+                                    <span class="form-status-title block font-display text-sm font-semibold text-white"></span>
+                                    <span class="form-status-message mt-1 block text-xs leading-5 text-white/70"></span>
+                                </span>
+                            </div>
                         </div>
                     </form>
+                    <iframe id="enquiry-response" name="enquiry-response" class="sr-only" title="Enquiry submission response" aria-hidden="true"></iframe>
                 </div>
             </div>
         </section>
@@ -1095,73 +1348,91 @@
             const hasScrollTrigger = hasGsap && typeof window.ScrollTrigger !== "undefined";
 
             const momentsGallery = document.getElementById("moments-gallery");
-            const momentsDeckStatus = document.getElementById("moments-deck-status");
-            if (momentsGallery && momentsDeckStatus) {
+            if (momentsGallery) {
                 const momentCards = Array.from(momentsGallery.querySelectorAll(".moment-card"));
-                let isDealing = false;
-                let dealCount = 0;
-                let deckIsVisible = !("IntersectionObserver" in window);
+                const progressButtons = Array.from(document.querySelectorAll(".moments-progress button"));
+                const previousButton = document.getElementById("moments-previous");
+                const nextButton = document.getElementById("moments-next");
+                const toggleButton = document.getElementById("moments-toggle");
+                let currentIndex = 0;
+                let deckIsVisible = false;
+                let userPaused = false;
 
-                function updateMomentDeck() {
-                    momentCards.forEach((card, index) => {
-                        const isTopCard = index === 0;
-                        card.style.setProperty("--deck-offset", String(index));
-                        card.classList.toggle("is-top", isTopCard);
-                        card.setAttribute("role", "button");
-                        card.setAttribute("aria-roledescription", "card");
-                        card.setAttribute("aria-label", `${card.querySelector("img").alt}. Activate to deal the next photo.`);
-                        card.setAttribute("aria-hidden", String(!isTopCard));
-                        card.tabIndex = isTopCard ? 0 : -1;
-                        card.inert = !isTopCard;
+                function showMoment(index) {
+                    const nextIndex = (index + momentCards.length) % momentCards.length;
+                    if (nextIndex === currentIndex) return;
+
+                    momentCards.forEach(card => {
+                        if (card.classList.contains("is-leaving")) card.classList.remove("is-leaving");
+                        if (card.classList.contains("is-active")) {
+                            card.classList.remove("is-active");
+                            card.classList.add("is-leaving");
+                            window.setTimeout(() => {
+                                if (!card.classList.contains("is-active")) card.classList.remove("is-leaving");
+                            }, 800);
+                        }
                     });
-                    momentsDeckStatus.textContent = `${reducedMotion ? "Tap the top photo to deal the next card" : "Auto shuffle · hover or focus to pause"} · ${String((dealCount % momentCards.length) + 1).padStart(2, "0")} / ${String(momentCards.length).padStart(2, "0")}`;
+
+                    currentIndex = nextIndex;
+                    momentCards.forEach((card, cardIndex) => {
+                        const isActive = cardIndex === currentIndex;
+                        card.classList.toggle("is-active", isActive);
+                        card.setAttribute("aria-hidden", String(!isActive));
+                        card.inert = !isActive;
+                    });
+                    progressButtons.forEach((button, buttonIndex) => {
+                        button.setAttribute("aria-current", String(buttonIndex === currentIndex));
+                    });
                 }
 
-                function dealNextCard(restoreFocus = false) {
-                    if (isDealing || momentCards.length < 2) return;
-                    isDealing = true;
-                    const dealtCard = momentCards[0];
-                    dealCount += 1;
-                    dealtCard.style.setProperty("--deal-rotation", dealCount % 2 ? "18deg" : "-18deg");
-                    dealtCard.classList.add("is-dealing");
-                    momentsGallery.classList.add("is-shuffling");
-
-                    window.setTimeout(() => {
-                        dealtCard.classList.remove("is-dealing");
-                        momentCards.push(momentCards.shift());
-                        updateMomentDeck();
-                        momentsGallery.classList.remove("is-shuffling");
-                        isDealing = false;
-                        if (restoreFocus) momentCards[0].focus({ preventScroll: true });
-                    }, reducedMotion ? 0 : 720);
+                function moveMoment(direction) {
+                    showMoment(currentIndex + direction);
                 }
 
-                momentCards.forEach(card => {
-                    card.addEventListener("click", () => {
-                        if (card.classList.contains("is-top")) dealNextCard(true);
+                if (previousButton && nextButton && toggleButton && progressButtons.length === momentCards.length) {
+                    previousButton.addEventListener("click", () => moveMoment(-1));
+                    nextButton.addEventListener("click", () => moveMoment(1));
+                    progressButtons.forEach((button, index) => button.addEventListener("click", () => showMoment(index)));
+                    momentsGallery.addEventListener("keydown", event => {
+                        if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+                            event.preventDefault();
+                            moveMoment(event.key === "ArrowRight" ? 1 : -1);
+                        }
                     });
-                    card.addEventListener("keydown", event => {
-                        if (!card.classList.contains("is-top") || (event.key !== "Enter" && event.key !== " ")) return;
-                        event.preventDefault();
-                        dealNextCard(true);
-                    });
-                });
-                updateMomentDeck();
-                momentsGallery.classList.add("is-ready");
 
-                if (!reducedMotion && momentCards.length > 1) {
-                    if ("IntersectionObserver" in window) {
-                        const deckObserver = new IntersectionObserver(entries => {
-                            deckIsVisible = entries[0].isIntersecting;
-                        }, { threshold: 0.15 });
-                        deckObserver.observe(momentsGallery);
+                    toggleButton.hidden = reducedMotion;
+                    toggleButton.addEventListener("click", () => {
+                        userPaused = !userPaused;
+                        toggleButton.setAttribute("aria-pressed", String(userPaused));
+                        toggleButton.setAttribute("aria-label", userPaused ? "Resume automatic photo changes" : "Pause automatic photo changes");
+                        toggleButton.innerHTML = userPaused
+                            ? '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m8 5 11 7-11 7z"/></svg>'
+                            : '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5h3v14H8zm5 0h3v14h-3z"/></svg>';
+                    });
+
+                    if (!reducedMotion) {
+                        if ("IntersectionObserver" in window) {
+                            const galleryObserver = new IntersectionObserver(entries => {
+                                deckIsVisible = entries[0].isIntersecting;
+                            }, { threshold: 0.15 });
+                            galleryObserver.observe(momentsGallery);
+                        } else {
+                            deckIsVisible = true;
+                        }
+
+                        window.setInterval(() => {
+                            if (!deckIsVisible || document.hidden || userPaused || momentsGallery.matches(":hover, :focus-within")) return;
+                            moveMoment(1);
+                        }, 5200);
                     }
-
-                    window.setInterval(() => {
-                        if (!deckIsVisible || document.hidden || momentsGallery.matches(":hover, :focus-within")) return;
-                        dealNextCard();
-                    }, 4600);
                 }
+            }
+
+            const navbar = document.getElementById("navbar");
+            if (navbar) {
+                const updateNavbarOnScroll = () => navbar.classList.toggle("is-scrolled", window.scrollY > 24);
+                updateNavbarOnScroll();
+                window.addEventListener("scroll", updateNavbarOnScroll, { passive: true });
             }
 
             const navToggle = document.getElementById("nav-toggle");
@@ -1216,7 +1487,7 @@
                     function measureFeedbackLoop() {
                         const groupWidth = feedbackGroup.getBoundingClientRect().width;
                         if (groupWidth > 0) {
-                            feedbackTrack.style.setProperty("--feedback-duration", `${groupWidth / 28}s`);
+                            feedbackTrack.style.setProperty("--feedback-duration", `${groupWidth / 48}s`);
                         }
                     }
 
@@ -1491,20 +1762,58 @@
         });
 
         const GOOGLE_SHEETS_FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbzWVwOYZmHlEl7Iau0SO7-IwaYHUjjihkICa0GYzgHZHxyqo9RQ9HyjM62RoOfaD7UU/exec";
+        const enquiryResponseFrame = document.getElementById("enquiry-response");
+        let enquirySubmissionPending = false;
+        let enquirySubmissionTimeout;
+
+        function setFormStatus(state, title, message) {
+            const status = document.getElementById("formStatus");
+            status.dataset.state = state;
+            status.querySelector(".form-status-title").textContent = title;
+            status.querySelector(".form-status-message").textContent = message;
+            status.classList.remove("hidden");
+        }
+
+        if (enquiryResponseFrame) {
+            enquiryResponseFrame.addEventListener("load", () => {
+                if (!enquirySubmissionPending) return;
+                enquirySubmissionPending = false;
+                window.clearTimeout(enquirySubmissionTimeout);
+
+                const form = document.getElementById("inquiryForm");
+                const submitButton = document.getElementById("submitBtn");
+                setFormStatus("success", "Enquiry received", "Thanks for reaching out. Your message is with me, and I’ll be in touch soon.");
+                submitButton.disabled = false;
+                submitButton.removeAttribute("aria-busy");
+                form.reset();
+            });
+        }
 
         function submitForm() {
-            const status = document.getElementById("formStatus");
             const form = document.getElementById("inquiryForm");
+            const submitButton = document.getElementById("submitBtn");
+            if (enquirySubmissionPending) return;
+
             if (!GOOGLE_SHEETS_FORM_ENDPOINT) {
-                status.textContent = "Google Sheets submissions are not enabled yet. The form needs the deployed Apps Script web-app URL.";
-                status.classList.remove("hidden");
+                setFormStatus("error", "Submission unavailable", "The enquiry form is not connected yet. Please contact me directly.");
                 return;
             }
 
             form.action = GOOGLE_SHEETS_FORM_ENDPOINT;
-            form.target = "_blank";
-            status.textContent = "Opening Google’s submission confirmation in a new tab…";
-            status.classList.remove("hidden");
+            form.target = enquiryResponseFrame.name;
+            setFormStatus("pending", "Sending your enquiry", "Please keep this page open while your message is submitted.");
+            submitButton.disabled = true;
+            submitButton.setAttribute("aria-busy", "true");
+
+            enquirySubmissionPending = true;
+            enquirySubmissionTimeout = window.setTimeout(() => {
+                if (!enquirySubmissionPending) return;
+                enquirySubmissionPending = false;
+                setFormStatus("error", "We couldn’t confirm submission", "Please try again, or contact me directly if the problem continues.");
+                submitButton.disabled = false;
+                submitButton.removeAttribute("aria-busy");
+            }, 20000);
+
             form.submit();
         }
     </script>
